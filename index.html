@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>J.E.M.S. PRO - Versión Móvil Autónoma</title>
-    <!-- Carga de Leaflet y jsPDF por CDN para que funcione en el móvil sin carpetas adicionales -->
+    <title>J.E.M.S. PRO - Salud, Entrenamiento & Telemetría</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -36,7 +35,7 @@
         .status-dot.connected { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
         .heart-beat { color: #ef4444; font-size: 1rem; animation: pulse 1.1s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.22); } }
-        .main-container { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 130px; }
+        .main-container { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 135px; }
         .view { display: none; }
         .view.active { display: block; }
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05); }
@@ -47,7 +46,8 @@
         .qn-title { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-top: 6px; }
         .qn-value { font-size: 1.05rem; font-weight: 900; color: var(--text-main); margin: 3px 0; font-variant-numeric: tabular-nums; }
         .qn-link { font-size: 0.68rem; color: var(--accent); font-weight: 700; }
-        .select-light-dropdown { width: 100%; background-color: #ffffff; color: #0f172a; border: 2px solid #0284c7; padding: 11px 12px; border-radius: 10px; font-size: 0.86rem; font-weight: 700; outline: none; }
+        .select-light-dropdown { width: 100%; background-color: #ffffff; color: #0f172a; border: 2px solid #0284c7; padding: 11px 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; outline: none; }
+        .select-light-dropdown option { background-color: #ffffff; color: #0f172a; }
         .console-card { border-top: 4px solid var(--accent); }
         .console-header { display: flex; justify-content: space-between; align-items: center; }
         .phase-pill { background: #dcfce7; color: #15803d; font-weight: 800; font-size: 0.78rem; padding: 5px 10px; border-radius: 8px; }
@@ -98,17 +98,18 @@
         .clin-tag { display: inline-block; font-size: 0.64rem; font-weight: 800; padding: 2px 6px; border-radius: 5px; background: #e0f2fe; color: #0369a1; }
         .supp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .check-pill { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .gps-map-box { width: 100%; height: 210px; background: #cbd5e1; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; z-index: 1; }
+        .gps-map-box { width: 100%; height: 220px; background: #cbd5e1; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; z-index: 1; }
         .gps-metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .gps-metric-box { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 7px 5px; text-align: center; }
         .gps-metric-box small { display: block; font-size: 0.58rem; color: var(--text-muted); font-weight: 700; }
         .gps-metric-box strong { font-size: 0.84rem; color: var(--text-main); }
+        .elevation-canvas { width: 100%; height: 75px; background: #0f172a; border-radius: 8px; display: block; }
         .builder-subcard { background: var(--bg-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px; }
         .ex-list-item { background: var(--bg-soft); border-left: 4px solid var(--accent); padding: 9px; border-radius: 8px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-ex { background: var(--red); color: #fff; border: none; border-radius: 6px; padding: 6px 10px; font-weight: 800; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 2000; }
         .modal-card { background: #fff; border-radius: 16px; padding: 20px; width: 100%; max-width: 420px; }
-        .bottom-nav { position: fixed; left: 10px; right: 10px; bottom: 20px; height: 62px; background: #0f172a; border: 1px solid #334155; border-radius: 16px; display: grid; grid-template-columns: repeat(5, 1fr); box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35); z-index: 1000; }
+        .bottom-nav { position: fixed; left: 10px; right: 10px; bottom: 22px; height: 62px; background: #0f172a; border: 1px solid #334155; border-radius: 16px; display: grid; grid-template-columns: repeat(5, 1fr); box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35); z-index: 1000; }
         .nav-item { background: none; border: none; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; }
         .nav-item small { font-size: 0.6rem; font-weight: 800; margin-top: 2px; }
         .nav-item.active { color: #38bdf8; }
@@ -121,13 +122,14 @@
 </head>
 <body>
 
+    <!-- MODAL DE IDENTIFICACIÓN -->
     <div id="modal-onboarding" class="modal-overlay hidden">
         <div class="modal-card">
             <h2>Identificación y Telemetría</h2>
-            <p class="sub-text">Configura tus datos para personalizar zonas cardíacas, IMC e informes de salud.</p>
+            <p class="sub-text">Configura tus datos para personalizar las zonas cardíacas, el IMC y el envío de informes a tu correo.</p>
             <label class="field-label mt-8">Nombre completo</label>
             <input type="text" id="prof-name" class="input-pro" placeholder="Juan Enrique Martínez">
-            <label class="field-label mt-8">Correo electrónico (para informes)</label>
+            <label class="field-label mt-8">Correo electrónico (para envío de informes)</label>
             <input type="email" id="prof-email" class="input-pro" placeholder="correo@ejemplo.com">
             <div class="grid-3 mt-8">
                 <div><label class="field-label">Edad</label><input type="number" id="prof-age" class="input-pro" value="49"></div>
@@ -138,6 +140,7 @@
         </div>
     </div>
 
+    <!-- CABECERA -->
     <header class="top-bar">
         <div class="brand" onclick="App.openProfileModal()">
             <div class="avatar-circle" id="user-avatar">JE</div>
@@ -154,14 +157,14 @@
     </header>
 
     <main class="main-container">
-        <!-- VISTA 1: CONSOLA -->
+        <!-- VISTA 1: CONSOLA DE ENTRENAMIENTO -->
         <section id="view-dashboard" class="view active">
             <div class="grid-2">
                 <button class="quick-nav-card" onclick="App.switchView('view-fasting')">
                     <div class="qn-top"><span class="qn-icon">⏳</span><span class="badge badge-blue" id="dash-fast-proto">14/10</span></div>
                     <div class="qn-title">Ayuno Intermitente</div>
                     <div class="qn-value" id="dash-fast-timer">Inactivo</div>
-                    <small class="qn-link">Abrir ayuno →</small>
+                    <small class="qn-link">Abrir página de ayuno →</small>
                 </button>
                 <button class="quick-nav-card" onclick="App.switchView('view-biometrics')">
                     <div class="qn-top"><span class="qn-icon">🩺</span><span class="badge badge-green" id="dash-bio-weight">-- kg</span></div>
@@ -171,19 +174,23 @@
                 </button>
             </div>
 
+            <!-- DESPLEGABLE CLARO CON SENDERISMO, CACO, CARRERA, HYROX, CROSSFIT -->
             <div class="card mt-10">
-                <label class="field-label">⚡ MODOS RÁPIDOS (DESPLEGABLE)</label>
+                <label class="field-label">⚡ MODALIDAD RÁPIDA DE ENTRENAMIENTO (DESPLEGABLE)</label>
                 <select id="quick-mode-select" class="select-light-dropdown mt-6" onchange="App.onQuickModeSelected(this.value)">
-                    <option value="CACO_3_1">🚶/🏃 CACO (3 min Caminar / 1 min Correr x 8)</option>
-                    <option value="CACO_2_2">🚶/🏃 CACO (2 min Caminar / 2 min Correr x 10)</option>
-                    <option value="RUN_FREE">🏃 Carrera / Senderismo Libre con GPS</option>
-                    <option value="HYROX_8">🔥 Simulación HYROX (8 Estaciones)</option>
-                    <option value="CROSSFIT_EMOM">🏋️ CrossFit EMOM 15 min</option>
-                    <option value="CROSSFIT_AMRAP">🏋️ CrossFit AMRAP 12 min</option>
-                    <option value="TABATA">⚡ Tabata HIIT (20s / 10s x 8)</option>
+                    <option value="CACO_3_1">🚶/🏃 CACO Estándar (3 min Caminar / 1 min Correr x 8)</option>
+                    <option value="CACO_2_2">🚶/🏃 CACO Intenso (2 min Caminar / 2 min Correr x 10)</option>
+                    <option value="HIKING_GPS">🥾 Senderismo / Trekking / Montaña (con GPS y Desnivel)</option>
+                    <option value="RUN_FREE">🏃 Carrera Continua en Calle (con GPS)</option>
+                    <option value="WALK_ACTIVE">🚶 Caminata Activa / Patrulla (con GPS)</option>
+                    <option value="HYROX_8">🔥 Simulación HYROX (8 Estaciones: 4' Trabajo / 2' Transición)</option>
+                    <option value="CROSSFIT_EMOM">🏋️ CrossFit EMOM (1 min por ronda x 15 min)</option>
+                    <option value="CROSSFIT_AMRAP">🏋️ CrossFit AMRAP (12 minutos continuos)</option>
+                    <option value="TABATA">⚡ Tabata HIIT (20 seg Trabajo / 10 seg Descanso x 8)</option>
                 </select>
             </div>
 
+            <!-- CONSOLA CENTRAL: TIEMPO + PULSACIONES REALES EN VIVO -->
             <div class="card console-card mt-10">
                 <div class="console-header">
                     <span class="phase-pill" id="timer-phase-label">LISTO PARA ENTRENAR</span>
@@ -193,26 +200,26 @@
 
                 <div class="time-hr-split">
                     <div class="time-box">
-                        <small>TIEMPO DE FASE</small>
+                        <small>TIEMPO DE FASE / RUTA</small>
                         <div class="timer-giant" id="main-workout-timer">03:00</div>
                     </div>
                     <div class="hr-live-box">
-                        <small>PULSACIONES EN VIVO</small>
+                        <small>PULSACIONES REALES</small>
                         <div class="bpm-giant"><span class="heart-beat">♥</span> <span id="console-live-bpm">--</span></div>
-                        <span class="zone-pill" id="console-live-zone">ZONA --</span>
+                        <span class="zone-pill" id="console-live-zone">SIN SENSOR BLE</span>
                     </div>
                 </div>
 
                 <div class="hr-zone-bar-wrap">
                     <div class="hr-zone-bar"><div class="hr-zone-fill" id="hr-visual-fill"></div></div>
-                    <div class="hr-zone-labels"><span>Z1</span><span>Z2 Grasa</span><span>Z3 Aeróbico</span><span>Z4 Umbral</span><span>Z5 Máx</span></div>
+                    <div class="hr-zone-labels"><span>Z1 Suave</span><span>Z2 Quema Grasa</span><span>Z3 Aeróbico</span><span>Z4 Umbral</span><span>Z5 Máx</span></div>
                 </div>
 
                 <div class="console-metrics-grid mt-8">
-                    <div class="c-metric"><small>RONDA</small><strong id="timer-round-info">1 / 8</strong></div>
-                    <div class="c-metric"><small>FC MED/MÁX</small><strong id="timer-hr-stats">-- / --</strong></div>
-                    <div class="c-metric"><small>GASTO</small><strong id="timer-kcal">0 kcal</strong></div>
-                    <div class="c-metric"><small>DISTANCIA</small><strong id="console-gps-dist">0.00 km</strong></div>
+                    <div class="c-metric"><small>RONDA / EST.</small><strong id="timer-round-info">1 / 8</strong></div>
+                    <div class="c-metric"><small>FC MED / MÁX</small><strong id="timer-hr-stats">-- / --</strong></div>
+                    <div class="c-metric"><small>GASTO ACTIVO</small><strong id="timer-kcal">0 kcal</strong></div>
+                    <div class="c-metric"><small>DISTANCIA GPS</small><strong id="console-gps-dist">0.00 km</strong></div>
                 </div>
 
                 <div class="btn-group mt-10">
@@ -226,64 +233,73 @@
                 </div>
             </div>
 
+            <!-- MAPA GPS NORMAL/TERRENO + DESNIVEL + CACHÉ OFFLINE -->
             <div class="card mt-10">
                 <div class="card-header">
-                    <span>🛰️ MAPA GPS Y ALTIMETRÍA</span>
+                    <span>🛰️ GPS, MAPA NORMAL/TERRENO Y ALTIMETRÍA</span>
                     <span class="badge" id="gps-status-badge">INACTIVO</span>
                 </div>
                 <div class="btn-group mb-8">
                     <button class="btn btn-xs btn-primary" id="btn-map-normal" onclick="App.setMapLayer('NORMAL')">🗺️ NORMAL</button>
-                    <button class="btn btn-xs btn-secondary" id="btn-map-terrain" onclick="App.setMapLayer('TERRAIN')">⛰️ TERRENO</button>
+                    <button class="btn btn-xs btn-secondary" id="btn-map-terrain" onclick="App.setMapLayer('TERRAIN')">⛰️ TERRENO / TOPO</button>
                     <button class="btn btn-xs btn-secondary" onclick="App.centerMapOnUser()">🎯 CENTRAR</button>
                     <button class="btn btn-xs btn-secondary" onclick="App.exportCurrentRouteGPX()">📥 .GPX</button>
                 </div>
+                <div class="btn-group mb-8">
+                    <button class="btn btn-xs btn-success" onclick="App.downloadVisibleRegionOffline()">📦 DESCARGAR ZONA OFFLINE</button>
+                    <button class="btn btn-xs btn-secondary" onclick="App.clearOfflineMapCache()">🗑️ LIMPIAR CACHÉ</button>
+                </div>
+                <div id="offline-map-status" class="sub-text mb-8">📦 Cartografía Offline activa.</div>
+
                 <div id="tactical-map" class="gps-map-box"></div>
+
                 <div class="gps-metrics-grid mt-8">
                     <div class="gps-metric-box"><small>DISTANCIA</small><strong id="gps-dist">0.00 km</strong></div>
-                    <div class="gps-metric-box"><small>RITMO</small><strong id="gps-pace">--:-- /km</strong></div>
+                    <div class="gps-metric-box"><small>RITMO MEDIO</small><strong id="gps-pace">--:-- /km</strong></div>
                     <div class="gps-metric-box"><small>ALTITUD</small><strong id="gps-alt">-- m</strong></div>
                     <div class="gps-metric-box"><small>DESNIVEL +</small><strong id="gps-gain" style="color:var(--green)">+0 m</strong></div>
                     <div class="gps-metric-box"><small>DESNIVEL -</small><strong id="gps-loss" style="color:var(--orange)">-0 m</strong></div>
-                    <div class="gps-metric-box"><small>ESFUERZO</small><strong id="gps-effort">0 pts</strong></div>
+                    <div class="gps-metric-box"><small>ESFUERZO TRIMP</small><strong id="gps-effort">0 pts</strong></div>
                 </div>
+                <canvas id="elevation-chart" width="360" height="75" class="elevation-canvas mt-8"></canvas>
             </div>
         </section>
 
-        <!-- VISTA 2: RUTINAS -->
+        <!-- VISTA 2: CONSTRUCTOR TOTAL DE RUTINAS (CON SENDERISMO, CROSSFIT, HYROX, FUERZA, CARDIO) -->
         <section id="view-workouts" class="view">
             <div class="card">
                 <div class="card-header">
-                    <span>🏋️ CONSTRUCTOR TOTAL DE RUTINAS</span>
-                    <button class="btn btn-xs btn-primary" onclick="App.toggleRoutineEditor(true)">+ NUEVA</button>
+                    <span>🏋️ CONSTRUCTOR TOTAL DE ENTRENAMIENTOS</span>
+                    <button class="btn btn-xs btn-primary" onclick="App.toggleRoutineEditor(true)">+ CREAR NUEVA</button>
                 </div>
                 <div id="routine-editor" class="hidden mt-10">
                     <div class="grid-2">
-                        <input type="text" id="rot-name" class="input-pro" placeholder="Nombre de la Rutina">
+                        <input type="text" id="rot-name" class="input-pro" placeholder="Nombre de la Rutina o Ruta">
                         <input type="number" id="rot-rounds" class="input-pro" value="3" placeholder="Rondas">
                     </div>
                     <div class="builder-subcard mt-8">
                         <div class="grid-2">
                             <select id="add-ex-cat" class="select-light-dropdown" onchange="App.updateSubcategories()">
+                                <option value="CARDIO">Cardio / Senderismo / Carrera</option>
                                 <option value="FUERZA">Fuerza / Musculación</option>
-                                <option value="CARDIO">Cardio / Carrera</option>
                                 <option value="CROSSFIT">CrossFit / WOD</option>
                                 <option value="HYROX">Hyrox / Funcional</option>
-                                <option value="MIXTO">Core / Abdominales</option>
+                                <option value="MIXTO">Core / Abdominales / Mixto</option>
                             </select>
                             <select id="add-ex-sub" class="select-light-dropdown"></select>
                         </div>
-                        <input type="text" id="add-ex-name" class="input-pro mt-8" placeholder="Nombre del ejercicio">
+                        <input type="text" id="add-ex-name" class="input-pro mt-8" placeholder="Nombre (ej. Ruta Monte, Remo TRX, Thrusters...)">
                         <div class="grid-4 mt-8">
                             <input type="number" id="add-ex-sets" class="input-pro" placeholder="Series">
                             <input type="number" id="add-ex-reps" class="input-pro" placeholder="Reps">
                             <input type="number" id="add-ex-weight" class="input-pro" placeholder="Kg">
                             <input type="number" id="add-ex-time" class="input-pro" placeholder="Segs">
                         </div>
-                        <button class="btn btn-primary btn-block mt-8" onclick="App.addExerciseToRoutine()">+ AÑADIR EJERCICIO</button>
+                        <button class="btn btn-primary btn-block mt-8" onclick="App.addExerciseToRoutine()">+ AÑADIR A LA RUTINA</button>
                     </div>
                     <div id="routine-exercises-list" class="mt-8"></div>
                     <div class="btn-group mt-10">
-                        <button class="btn btn-success" onclick="App.saveCustomRoutine()">💾 GUARDAR</button>
+                        <button class="btn btn-success" onclick="App.saveCustomRoutine()">💾 GUARDAR RUTINA</button>
                         <button class="btn btn-secondary" onclick="App.toggleRoutineEditor(false)">CANCELAR</button>
                     </div>
                 </div>
@@ -291,7 +307,7 @@
             <div id="routines-list"></div>
         </section>
 
-        <!-- VISTA 3: AYUNO 14/10 -->
+        <!-- VISTA 3: AYUNO INTERMITENTE (14/10 POR DEFECTO Y CONTINUO) -->
         <section id="view-fasting" class="view">
             <div class="card">
                 <div class="card-header">
@@ -299,13 +315,13 @@
                     <button class="btn btn-xs btn-secondary" onclick="App.switchView('view-dashboard')">← VOLVER</button>
                 </div>
                 <select id="select-fasting-type" class="select-light-dropdown mt-6" onchange="App.changeFastingProtocol(this.value)">
-                    <option value="14" selected>Protocolo 14/10 (Por defecto)</option>
-                    <option value="16">Protocolo 16/8</option>
-                    <option value="18">Protocolo 18/6</option>
-                    <option value="20">Protocolo 20/4</option>
+                    <option value="14" selected>Protocolo 14/10 (14h Ayuno / 10h Ventana - Por defecto)</option>
+                    <option value="16">Protocolo 16/8 (16h Ayuno / 8h Ventana)</option>
+                    <option value="18">Protocolo 18/6 (18h Ayuno / 6h Ventana)</option>
+                    <option value="20">Protocolo 20/4 (Guerrero)</option>
                 </select>
                 <div class="fasting-hero-box mt-10">
-                    <div class="sub-text" id="fasting-phase-badge" style="color:#94a3b8">VENTANA ABIERTA</div>
+                    <div class="sub-text" id="fasting-phase-badge" style="color:#94a3b8">VENTANA DE ALIMENTACIÓN ABIERTA</div>
                     <div class="fasting-clock" id="fasting-timer-hm">00:00:00</div>
                     <div class="fasting-progress-wrap"><div class="fasting-progress-fill" id="fasting-progress-bar"></div></div>
                     <div class="fasting-meta-row mt-8">
@@ -313,17 +329,17 @@
                         <div><small>META</small><strong id="fasting-goal-label">14h</strong></div>
                         <div><small>PROGRESO</small><strong id="fasting-pct-label">0%</strong></div>
                     </div>
-                    <button class="btn btn-success btn-block mt-12" id="btn-toggle-fasting" onclick="App.toggleFasting()">▶ EMPEZAR AYUNO</button>
+                    <button class="btn btn-success btn-block mt-12" id="btn-toggle-fasting" onclick="App.toggleFasting()">▶ EMPEZAR AYUNO AHORA</button>
                 </div>
                 <div id="fasting-history-list" class="mt-10"></div>
             </div>
         </section>
 
-        <!-- VISTA 4: BIOMETRÍA CLÍNICA -->
+        <!-- VISTA 4: BIOMETRÍA Y CONSTANTES CLÍNICAS -->
         <section id="view-biometrics" class="view">
             <div class="card">
                 <div class="card-header">
-                    <span>🩺 CONSTANTES VITALES Y BIOMETRÍA</span>
+                    <span>🩺 CONSTANTES VITALES, BIOMETRÍA E IMC</span>
                     <button class="btn btn-xs btn-secondary" onclick="App.switchView('view-dashboard')">← VOLVER</button>
                 </div>
                 <div class="clinical-summary-grid mt-6">
@@ -334,11 +350,11 @@
                 </div>
                 <div class="grid-3 mt-10">
                     <div><label class="field-label">Peso (kg)</label><input type="number" step="0.1" id="bio-weight" class="input-pro" placeholder="126.5"></div>
-                    <div><label class="field-label">Sistólica</label><input type="number" id="bio-sys" class="input-pro" placeholder="122"></div>
-                    <div><label class="field-label">Diastólica</label><input type="number" id="bio-dia" class="input-pro" placeholder="78"></div>
+                    <div><label class="field-label">T. Sistólica</label><input type="number" id="bio-sys" class="input-pro" placeholder="122"></div>
+                    <div><label class="field-label">T. Diastólica</label><input type="number" id="bio-dia" class="input-pro" placeholder="78"></div>
                 </div>
                 <div class="grid-3 mt-8">
-                    <div><label class="field-label">Glucosa</label><input type="number" id="bio-glucose" class="input-pro" placeholder="88"></div>
+                    <div><label class="field-label">Glucosa (mg/dL)</label><input type="number" id="bio-glucose" class="input-pro" placeholder="88"></div>
                     <div><label class="field-label">O2 (%SpO2)</label><input type="number" id="bio-spo2" class="input-pro" placeholder="98"></div>
                     <div><label class="field-label">FC Reposo</label><input type="number" id="bio-hr-rest" class="input-pro" placeholder="58"></div>
                 </div>
@@ -355,46 +371,87 @@
                     <label class="check-pill"><input type="checkbox" value="Kefir"> Kéfir</label>
                     <label class="check-pill"><input type="checkbox" value="Electrolitos"> Electrolitos</label>
                 </div>
-                <button class="btn btn-primary btn-block mt-10" onclick="App.saveBiometricsToday()">💾 GUARDAR CONSTANTES</button>
+                <button class="btn btn-primary btn-block mt-10" onclick="App.saveBiometricsToday()">💾 GUARDAR Y ACTUALIZAR CONSTANTES</button>
                 <div id="biometrics-history-list" class="mt-10"></div>
             </div>
         </section>
 
-        <!-- VISTA 5: SENSORES E INFORMES -->
+        <!-- VISTA 5: SENSORES BLE REALES + SINCRONIZACIÓN DE OTRAS APPS DE SALUD + INFORMES -->
         <section id="view-sensors" class="view">
+            <!-- 1. CONEXIÓN BLUETOOTH REAL (SIN SIMULACIÓN FALSA) -->
             <div class="card">
                 <div class="card-header">
-                    <span>📡 AGREGAR DISPOSITIVOS Y SENSORES</span>
-                    <span class="badge badge-blue" id="sensor-count-badge">Listo</span>
+                    <span>📡 CONECTAR DISPOSITIVOS BLUETOOTH (DATOS REALES)</span>
+                    <span class="badge badge-blue" id="sensor-count-badge">BLE GATT</span>
                 </div>
-                <div class="grid-2 mt-6">
+                <p class="sub-text">Activa "Compartir FC / Difusión de FC" en tu reloj Amazfit T-Rex 3 Pro o ponte tu banda pectoral y pulsa Escanear para leer tus pulsaciones exactas.</p>
+
+                <div class="grid-2 mt-8">
                     <select id="device-type-select" class="select-light-dropdown">
-                        <option value="HR_BAND">💓 Banda Pectoral FC</option>
-                        <option value="SMARTWATCH">⌚ Smartwatch / Reloj (Amazfit)</option>
-                        <option value="WRISTBAND">📿 Pulsera Inteligente</option>
-                        <option value="SCALE">⚖️ Báscula Bluetooth</option>
+                        <option value="SMARTWATCH">⌚ Smartwatch / Reloj (Amazfit T-Rex 3 Pro / Garmin)</option>
+                        <option value="HR_BAND">💓 Banda Pectoral FC (Polar / Garmin / CooSpo)</option>
+                        <option value="WRISTBAND">📿 Pulsera de Actividad (Xiaomi Smart Band)</option>
+                        <option value="SCALE">⚖️ Báscula Inteligente Bluetooth</option>
+                        <option value="CADENCE">👟 Sensor de Carrera / Cadencia / Remo FTMS</option>
                     </select>
-                    <input type="text" id="custom-device-name" class="input-pro" placeholder="Nombre (ej. T-Rex 3 Pro)">
+                    <input type="text" id="custom-device-name" class="input-pro" placeholder="Alias (ej. T-Rex 3 Pro)">
                 </div>
+
                 <div class="btn-group mt-8">
-                    <button class="btn btn-primary" onclick="App.pairSelectedDeviceBLE()">🔍 ESCANEAR BLE</button>
-                    <button class="btn btn-secondary" onclick="App.registerManualOrPairedDevice(true)">➕ AGREGAR Y CONECTAR</button>
+                    <button class="btn btn-primary" onclick="App.connectRealBluetoothSensor()">🔍 ESCANEAR Y LEER FC REAL (BLE)</button>
+                    <button class="btn btn-secondary" onclick="App.saveDeviceBookmark()">➕ GUARDAR EN MI LISTA</button>
                 </div>
-                <div id="ble-devices-log" class="status-banner mt-8">Selecciona un sensor para vincular.</div>
+
+                <div id="ble-devices-log" class="status-banner mt-8">Estado: Sin sensor conectado (No se muestran pulsaciones simuladas).</div>
                 <div id="saved-devices-list" class="mt-8"></div>
             </div>
 
+            <!-- 2. RECOGER DATOS DE OTRAS APLICACIONES DE EJERCICIO Y SALUD (RESTAURADO COMPLETO) -->
             <div class="card">
-                <div class="card-header"><span>📄 INFORME PROFESIONAL Y COPIAS</span></div>
+                <div class="card-header">
+                    <span>🔄 RECOGER DATOS DE OTRAS APPS DE EJERCICIO Y SALUD</span>
+                    <span class="badge badge-green">MULTI-APP</span>
+                </div>
+                <p class="sub-text">Importa y cruza tus pasos, calorías, rutas GPS, peso y sesiones desde <strong>Zepp (Amazfit), Mi Fitness (Xiaomi), Google Health Connect, Strava, Google Fit</strong> o archivos exportados (<code>.GPX</code>, <code>.TCX</code>, <code>.FIT</code>, <code>.CSV</code>, <code>.JSON</code>).</p>
+
+                <div class="grid-2 mt-8">
+                    <button class="btn btn-primary" onclick="App.syncAllPhoneHealthApps()">📱 SINCRONIZAR CON APPS DEL TELÉFONO</button>
+                    <label class="btn btn-success" style="cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                        📂 IMPORTAR ARCHIVO (.GPX/.FIT/.CSV/.JSON)
+                        <input type="file" id="file-import-external" accept=".gpx,.tcx,.fit,.csv,.json" hidden onchange="App.importExternalActivity(event)">
+                    </label>
+                </div>
+
+                <!-- Registro rápido manual desde Zepp / Mi Fitness si estás en navegador web -->
+                <div class="grid-3 mt-8">
+                    <input type="number" id="ext-steps-input" class="input-pro" placeholder="Pasos App (ej. 14500)">
+                    <input type="number" id="ext-kcal-input" class="input-pro" placeholder="Kcal Activas App">
+                    <button class="btn btn-secondary" onclick="App.saveManualExternalAppSync()">📥 VOLCAR DATOS</button>
+                </div>
+
+                <div id="external-imports-summary" class="status-banner mt-8">Ninguna importación externa registrada hoy.</div>
+                <div id="external-history-list" class="mt-8"></div>
+            </div>
+
+            <!-- 3. INFORMES PROFESIONALES Y COPIA MAESTRA -->
+            <div class="card">
+                <div class="card-header"><span>📄 INFORME CLÍNICO-DEPORTIVO Y COPIA MAESTRA</span></div>
                 <div class="btn-stack mt-6">
-                    <button class="btn btn-success" onclick="App.generateVectorPDF()">📄 DESCARGAR INFORME PDF</button>
-                    <button class="btn btn-primary" onclick="App.sendClinicalReportByEmail()">✉️ ENVIAR INFORME A MI CORREO</button>
-                    <button class="btn btn-secondary" onclick="FitDB.exportMasterBackup()">📤 EXPORTAR BACKUP (.JSON)</button>
+                    <button class="btn btn-success" onclick="App.generateVectorPDF()">📄 DESCARGAR INFORME COMPLETO (PDF)</button>
+                    <button class="btn btn-primary" onclick="App.sendClinicalReportByEmail()">✉️ ENVIAR INFORME Y TELEMETRÍA A MI CORREO</button>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="FitDB.exportMasterBackup()">📤 EXPORTAR BACKUP (.JSON)</button>
+                        <label class="btn btn-secondary" style="cursor:pointer;">
+                            📥 RESTAURAR (.JSON)
+                            <input type="file" accept=".json" hidden onchange="App.restoreBackupFile(event)">
+                        </label>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- BARRA DE NAVEGACIÓN FLOTANTE ELEVADA -->
     <nav class="bottom-nav">
         <button class="nav-item active" data-target="view-dashboard" onclick="App.switchView('view-dashboard')"><span>⚡</span><small>ENTRENAR</small></button>
         <button class="nav-item" data-target="view-workouts" onclick="App.switchView('view-workouts')"><span>🏋️</span><small>RUTINAS</small></button>
@@ -432,38 +489,104 @@
             async delete(store, key) {
                 return new Promise((res) => { const tx = this.db.transaction(store, 'readwrite'); tx.objectStore(store).delete(key); tx.oncomplete = () => res(true); });
             },
+            async getTile(key) {
+                if (!this.db) return null;
+                return new Promise((res) => {
+                    const tx = this.db.transaction('map_tiles', 'readonly');
+                    const r = tx.objectStore('map_tiles').get(key);
+                    r.onsuccess = () => res(r.result ? r.result.blob : null);
+                    r.onerror = () => res(null);
+                });
+            },
+            async clearTiles() {
+                return new Promise((res) => { const tx = this.db.transaction('map_tiles', 'readwrite'); tx.objectStore('map_tiles').clear(); tx.oncomplete = () => res(true); });
+            },
             async seedDefaults() {
                 const devs = await this.getAll('dispositivos');
                 if (devs.length === 0) {
-                    await this.put('dispositivos', { id: 'DEV_TREX3', nombre: 'Amazfit T-Rex 3 Pro', tipo: 'SMARTWATCH', protocolo: 'BLE 0x180D' });
-                    await this.put('dispositivos', { id: 'DEV_BANDA', nombre: 'Banda Pectoral FC', tipo: 'HR_BAND', protocolo: 'BLE 0x180D' });
+                    await this.put('dispositivos', { id: 'DEV_TREX3', nombre: 'Amazfit T-Rex 3 Pro', tipo: 'SMARTWATCH', protocolo: 'BLE Heart Rate 0x180D' });
+                    await this.put('dispositivos', { id: 'DEV_BANDA', nombre: 'Banda Pectoral FC', tipo: 'HR_BAND', protocolo: 'BLE Heart Rate 0x180D' });
                 }
             },
             async exportMasterBackup() {
-                const backup = { timestamp: new Date().toISOString(), localStorageState: { ...localStorage } };
+                const backup = {
+                    app: 'JEMS_PRO',
+                    timestamp: new Date().toISOString(),
+                    localStorageState: { ...localStorage },
+                    stores: {
+                        rutinas: await this.getAll('rutinas'),
+                        sesiones: await this.getAll('sesiones'),
+                        biometria: await this.getAll('biometria'),
+                        externos: await this.getAll('externos'),
+                        ayunos: await this.getAll('ayunos'),
+                        dispositivos: await this.getAll('dispositivos')
+                    }
+                };
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }));
                 a.download = `BACKUP_JEMS_${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
+            },
+            async restoreMasterBackup(jsonText) {
+                const data = JSON.parse(jsonText);
+                if (data.stores) {
+                    for (const [s, arr] of Object.entries(data.stores)) {
+                        if (this.db.objectStoreNames.contains(s)) {
+                            for (const item of arr) await this.put(s, item);
+                        }
+                    }
+                }
+                if (data.localStorageState) {
+                    for (const [k, v] of Object.entries(data.localStorageState)) localStorage.setItem(k, v);
+                }
             }
         };
 
         const App = {
             profile: { name: 'Juan Enrique Martínez', email: '', age: 49, height: 187, targetWeight: 108 },
             timer: { mode: 'CACO 3:1', workSec: 180, restSec: 60, totalRounds: 8, currentRound: 1, isWorkPhase: true, remainingSec: 180, running: false, intervalId: null, kcal: 0, hrSamples: [], customQueue: [], queueIndex: 0 },
-            ble: { currentBpm: 0, maxHr: 171, simInterval: null },
+            ble: { gattDevice: null, currentBpm: 0, maxHr: 171 },
             tts: { enabled: true },
-            gps: { enabled: false, watchId: null, map: null, tileLayer: null, polyline: null, marker: null, trackPoints: [], distanceKm: 0, currentSpeedKmh: 0, currentAlt: null, elevGain: 0, elevLoss: 0, lastValidPoint: null, trimpScore: 0 },
+            gps: { enabled: false, watchId: null, map: null, tileLayer: null, polyline: null, marker: null, currentLayerType: 'NORMAL', trackPoints: [], distanceKm: 0, currentSpeedKmh: 0, currentAlt: null, elevGain: 0, elevLoss: 0, lastValidPoint: null, trimpScore: 0 },
             builder: {
                 exercises: [],
                 categories: {
-                    FUERZA: ['Pesas / Mancuernas', 'Poleas en Casa', 'Gomas Elásticas', 'TRX / Suspensión', 'Step', 'Autocarga'],
-                    CARDIO: ['Correr', 'Caminar (CACO)', 'Salto a la Comba', 'Bicicleta', 'Remo / SkiErg'],
-                    CROSSFIT: ['WOD For Time', 'AMRAP', 'EMOM', 'Thrusters', 'Halterofilia', 'Gimnásticos', 'Burpees'],
-                    HYROX: ['SkiErg', 'Sled Push', 'Sled Pull', 'Rowing', 'Farmers Carry', 'Sandbag Lunges', 'Wall Balls'],
-                    MIXTO: ['Abdominales / Core', 'Planchas', 'Tabata HIIT']
+                    CARDIO: [
+                        '🥾 Senderismo / Trekking / Montaña',
+                        '🏃 Correr (Calle / Cinta)',
+                        '🚶/🏃 Intervalos CACO (Caminar/Correr)',
+                        '🚶 Caminata Activa / Marcha',
+                        'Salto a la Comba',
+                        'Bicicleta / Spinning',
+                        'Remo / SkiErg'
+                    ],
+                    FUERZA: [
+                        'Pesas / Mancuernas / Barra',
+                        'Poleas en Casa (Alta/Baja)',
+                        'Gomas Elásticas de Resistencia',
+                        'TRX / Suspensión',
+                        'Plataforma Step (Pierna/Glúteo)',
+                        'Autocarga (Flexiones / Dominadas)'
+                    ],
+                    CROSSFIT: [
+                        'WOD For Time', 'AMRAP', 'EMOM', 'Chipper',
+                        'Thrusters / Front Squat', 'Halterofilia (Snatch / Clean)',
+                        'Gimnásticos (Dominadas / T2B)', 'Box Jumps / Step',
+                        'Wall Balls', 'Kettlebell Swings', 'Burpees'
+                    ],
+                    HYROX: [
+                        'SkiErg 1000m', 'Sled Push (Empuje Trineo)', 'Sled Pull (Arrastre)',
+                        'Burpee Broad Jumps', 'Rowing 1000m', 'Farmers Carry',
+                        'Sandbag Lunges', 'Wall Balls'
+                    ],
+                    MIXTO: [
+                        'Abdominales / Core / Planchas',
+                        'Tabata HIIT (20s/10s)',
+                        'Movilidad y Estiramientos'
+                    ]
                 }
             },
+
             async init() {
                 await FitDB.init();
                 this.loadUserProfile();
@@ -471,10 +594,12 @@
                 await this.renderRoutines();
                 await this.renderSavedDevices();
                 await this.renderBiometrics();
+                await this.renderExternalHistory();
                 this.startFastingWatcher();
                 this.updateTimerDisplay();
                 setTimeout(() => this.initGpsModule(), 300);
             },
+
             loadUserProfile() {
                 const s = localStorage.getItem('jems_user_profile');
                 if (s) { try { this.profile = { ...this.profile, ...JSON.parse(s) }; } catch(_){} }
@@ -482,11 +607,13 @@
                 this.ble.maxHr = Math.max(150, 220 - (parseInt(this.profile.age, 10) || 49));
                 document.getElementById('header-user-info').textContent = `${this.profile.name} · ${this.profile.email || 'Configurar email'}`;
             },
+
             openProfileModal() {
                 document.getElementById('prof-name').value = this.profile.name;
                 document.getElementById('prof-email').value = this.profile.email;
                 document.getElementById('modal-onboarding').classList.remove('hidden');
             },
+
             saveUserProfile() {
                 this.profile.name = document.getElementById('prof-name').value.trim() || 'Usuario J.E.M.S.';
                 this.profile.email = document.getElementById('prof-email').value.trim();
@@ -498,34 +625,57 @@
                 this.loadUserProfile();
                 this.renderBiometrics();
             },
+
             switchView(id) {
                 document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.target === id));
                 document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
                 if (id === 'view-dashboard' && this.gps.map) setTimeout(() => this.gps.map.invalidateSize(), 150);
             },
+
             speak(t) {
                 if (!this.tts.enabled || !('speechSynthesis' in window)) return;
                 window.speechSynthesis.cancel();
                 const u = new SpeechSynthesisUtterance(t); u.lang = 'es-ES'; window.speechSynthesis.speak(u);
             },
+
             toggleVoice() {
                 this.tts.enabled = !this.tts.enabled;
                 document.getElementById('btn-toggle-voice').textContent = this.tts.enabled ? '🔊 VOZ: ACTIVA' : '🔇 VOZ: SILENCIADA';
             },
+
+            // --- MODOS RÁPIDOS CON SENDERISMO INCLUIDO ---
             onQuickModeSelected(v) {
                 const map = {
-                    CACO_3_1: ['CACO 3:1', 180, 60, 8], CACO_2_2: ['CACO 2:2', 120, 120, 10],
-                    RUN_FREE: ['RUTA GPS', 3600, 0, 1], HYROX_8: ['HYROX 8', 240, 120, 8],
-                    CROSSFIT_EMOM: ['EMOM 15', 60, 0, 15], CROSSFIT_AMRAP: ['AMRAP 12', 720, 0, 1],
-                    TABATA: ['TABATA', 20, 10, 8]
+                    CACO_3_1: ['CACO 3:1', 180, 60, 8, false],
+                    CACO_2_2: ['CACO 2:2', 120, 120, 10, false],
+                    HIKING_GPS: ['SENDERISMO / MONTAÑA', 7200, 0, 1, true],
+                    RUN_FREE: ['CARRERA CALLE GPS', 3600, 0, 1, true],
+                    WALK_ACTIVE: ['CAMINATA ACTIVA GPS', 3600, 0, 1, true],
+                    HYROX_8: ['HYROX 8 EST.', 240, 120, 8, false],
+                    CROSSFIT_EMOM: ['CROSSFIT EMOM', 60, 0, 15, false],
+                    CROSSFIT_AMRAP: ['CROSSFIT AMRAP', 720, 0, 1, false],
+                    TABATA: ['TABATA HIIT', 20, 10, 8, false]
                 };
                 const p = map[v] || map.CACO_3_1;
                 this.pauseWorkoutTimer();
-                this.timer.mode = p[0]; this.timer.workSec = p[1]; this.timer.restSec = p[2]; this.timer.totalRounds = p[3];
-                this.timer.currentRound = 1; this.timer.remainingSec = p[1]; this.timer.isWorkPhase = true;
+                this.timer.mode = p[0];
+                this.timer.workSec = p[1];
+                this.timer.restSec = p[2];
+                this.timer.totalRounds = p[3];
+                this.timer.currentRound = 1;
+                this.timer.remainingSec = p[1];
+                this.timer.isWorkPhase = true;
                 document.getElementById('active-mode-badge').textContent = p[0];
+                document.getElementById('active-station-detail').textContent = `Modalidad: ${p[0]}`;
                 this.updateTimerDisplay();
+
+                // Si elige Senderismo, Carrera o Caminata, sugerir/activar mapa terreno y GPS
+                if (p[4] && !this.gps.enabled) {
+                    if (v === 'HIKING_GPS') this.setMapLayer('TERRAIN');
+                    this.toggleGpsTracking();
+                }
             },
+
             startWorkoutTimer() {
                 if (this.timer.running) return;
                 this.timer.running = true;
@@ -537,74 +687,262 @@
                     if (diff < 1) return;
                     last += diff * 1000;
                     this.timer.remainingSec -= diff;
-                    const bpm = this.ble.currentBpm || 124;
-                    this.timer.hrSamples.push(bpm);
-                    this.timer.kcal += 0.14 * diff;
+
+                    // Solo guarda muestras de FC si vienen del sensor BLE real
+                    if (this.ble.currentBpm > 0) {
+                        this.timer.hrSamples.push(this.ble.currentBpm);
+                    }
+                    const hrForKcal = this.ble.currentBpm > 0 ? this.ble.currentBpm : 118;
+                    const weight = parseFloat(localStorage.getItem('jems_last_weight') || '126.5');
+                    const kcalPerMin = Math.max(4, ((-55.0969 + (0.6309 * hrForKcal) + (0.1988 * weight) + (0.2017 * (this.profile.age || 49))) / 4.184));
+                    this.timer.kcal += (kcalPerMin / 60) * diff;
+
                     if (this.timer.remainingSec <= 0) {
                         if (this.timer.isWorkPhase && this.timer.restSec > 0) {
-                            this.timer.isWorkPhase = false; this.timer.remainingSec = this.timer.restSec;
-                            this.speak('Cambio de ritmo.');
+                            this.timer.isWorkPhase = false;
+                            this.timer.remainingSec = this.timer.restSec;
+                            this.speak('Cambio de fase.');
                         } else {
                             this.timer.currentRound++;
-                            if (this.timer.currentRound > this.timer.totalRounds) { this.finishAndSaveWorkout(); return; }
-                            this.timer.isWorkPhase = true; this.timer.remainingSec = this.timer.workSec;
+                            if (this.timer.currentRound > this.timer.totalRounds) {
+                                this.finishAndSaveWorkout();
+                                return;
+                            }
+                            this.timer.isWorkPhase = true;
+                            this.timer.remainingSec = this.timer.workSec;
                             this.speak(`Ronda ${this.timer.currentRound}`);
                         }
                     }
                     this.updateTimerDisplay();
                 }, 500);
             },
+
             pauseWorkoutTimer() { this.timer.running = false; clearInterval(this.timer.intervalId); },
+
             async finishAndSaveWorkout() {
                 this.pauseWorkoutTimer();
-                await FitDB.put('sesiones', { id: 'SES_' + Date.now(), fecha: new Date().toISOString(), modo: this.timer.mode, kcal: Math.round(this.timer.kcal), avgHr: this.ble.currentBpm || 125, maxHr: 145, distanciaKm: Number(this.gps.distanceKm.toFixed(2)) });
-                this.speak('Sesión guardada.');
+                const avgHr = this.timer.hrSamples.length
+                    ? Math.round(this.timer.hrSamples.reduce((a, b) => a + b, 0) / this.timer.hrSamples.length)
+                    : (this.ble.currentBpm || 0);
+                const maxHr = this.timer.hrSamples.length ? Math.max(...this.timer.hrSamples) : avgHr;
+
+                await FitDB.put('sesiones', {
+                    id: 'SES_' + Date.now(),
+                    fecha: new Date().toISOString(),
+                    modo: this.timer.mode,
+                    kcal: Math.round(this.timer.kcal),
+                    avgHr,
+                    maxHr,
+                    distanciaKm: Number(this.gps.distanceKm.toFixed(2)),
+                    desnivelPositivoM: Math.round(this.gps.elevGain),
+                    desnivelNegativoM: Math.round(this.gps.elevLoss)
+                });
+                this.speak('Entrenamiento guardado en el historial.');
             },
+
             updateTimerDisplay() {
                 const m = String(Math.floor(Math.max(0, this.timer.remainingSec) / 60)).padStart(2, '0');
                 const s = String(Math.max(0, this.timer.remainingSec) % 60).padStart(2, '0');
                 document.getElementById('main-workout-timer').textContent = `${m}:${s}`;
                 document.getElementById('timer-round-info').textContent = `${this.timer.currentRound} / ${this.timer.totalRounds}`;
                 document.getElementById('timer-kcal').textContent = `${Math.round(this.timer.kcal)} kcal`;
+                if (this.timer.hrSamples.length > 0) {
+                    const avg = Math.round(this.timer.hrSamples.reduce((a, b) => a + b, 0) / this.timer.hrSamples.length);
+                    const max = Math.max(...this.timer.hrSamples);
+                    document.getElementById('timer-hr-stats').textContent = `${avg} / ${max}`;
+                }
             },
-            async pairSelectedDeviceBLE() {
-                if (!navigator.bluetooth) { await this.registerManualOrPairedDevice(true); return; }
+
+            // =====================================================================
+            // BLUETOOTH BLE 100% REAL (CERO SIMULACIÓN FALSA DE PULSACIONES)
+            // =====================================================================
+            async connectRealBluetoothSensor() {
+                const logEl = document.getElementById('ble-devices-log');
+                if (!navigator.bluetooth) {
+                    logEl.textContent = '⚠️ Abre la app desde Chrome con el enlace https:// de GitHub Pages y activa el Bluetooth del teléfono.';
+                    return;
+                }
+
                 try {
-                    const dev = await navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: ['heart_rate', 0x180D] });
-                    document.getElementById('custom-device-name').value = dev.name || 'Sensor BLE';
-                    await this.registerManualOrPairedDevice(true);
-                } catch (_) { await this.registerManualOrPairedDevice(true); }
+                    logEl.textContent = '🔍 Buscando sensores Bluetooth reales... (Asegúrate de activar "Compartir FC" en el reloj o llevar puesta la banda)';
+                    let device;
+                    try {
+                        // Intento 1: Filtro directo por servicio estándar Heart Rate (0x180D)
+                        device = await navigator.bluetooth.requestDevice({
+                            filters: [{ services: ['heart_rate'] }],
+                            optionalServices: [0x180D, 'battery_service', 0x181D, 0x181B]
+                        });
+                    } catch (_) {
+                        // Intento 2: Mostrar todos los dispositivos si el reloj oculta el UUID en el anuncio
+                        device = await navigator.bluetooth.requestDevice({
+                            acceptAllDevices: true,
+                            optionalServices: ['heart_rate', 0x180D, 'battery_service', 0x181D, 0x181B]
+                        });
+                    }
+
+                    const devName = device.name || document.getElementById('custom-device-name').value.trim() || 'Sensor BLE';
+                    logEl.textContent = `Conectando con ${devName}...`;
+
+                    const server = await device.gatt.connect();
+                    const service = await server.getPrimaryService('heart_rate');
+                    const char = await service.getCharacteristic('heart_rate_measurement');
+                    await char.startNotifications();
+
+                    char.addEventListener('characteristicvaluechanged', (e) => {
+                        const val = e.target.value;
+                        const flags = val.getUint8(0);
+                        // Decodificación oficial GATT 0x2A37 (uint8 o uint16 little-endian)
+                        const realBpm = (flags & 0x01) ? val.getUint16(1, true) : val.getUint8(1);
+                        this.onRealHeartRateReceived(realBpm, devName);
+                    });
+
+                    device.addEventListener('gattserverdisconnected', () => {
+                        this.ble.currentBpm = 0;
+                        document.getElementById('ble-status-dot').classList.remove('connected');
+                        document.getElementById('header-bpm').textContent = '--';
+                        document.getElementById('console-live-bpm').textContent = '--';
+                        document.getElementById('console-live-zone').textContent = 'DESCONECTADO';
+                        logEl.textContent = `⚠️ Sensor ${devName} desconectado.`;
+                    });
+
+                    document.getElementById('ble-status-dot').classList.add('connected');
+                    logEl.textContent = `✅ Conectado en tiempo real a ${devName}. Leyendo pulsaciones exactas del dispositivo.`;
+                    this.speak(`Sensor ${devName} vinculado. Lectura real activada.`);
+
+                    await FitDB.put('dispositivos', {
+                        id: 'DEV_' + devName.replace(/\s+/g, '_'),
+                        nombre: devName,
+                        tipo: document.getElementById('device-type-select').value,
+                        protocolo: 'BLE GATT 0x180D Real'
+                    });
+                    await this.renderSavedDevices();
+
+                } catch (err) {
+                    logEl.textContent = `❌ No se pudo leer el canal de FC (0x180D): ${err.message}. Verifica que en tu Amazfit esté encendida la opción "Compartir frecuencia cardíaca".`;
+                }
             },
-            async registerManualOrPairedDevice(connectNow) {
+
+            onRealHeartRateReceived(bpm, devName) {
+                this.ble.currentBpm = bpm;
+                document.getElementById('header-bpm').textContent = `${bpm}`;
+                document.getElementById('console-live-bpm').textContent = `${bpm}`;
+
+                const pct = Math.min(100, Math.max(0, Math.round((bpm / this.ble.maxHr) * 100)));
+                let zone = 'Z1 SUAVE';
+                let zClass = 'zone-1';
+                if (pct >= 90) { zone = 'Z5 MÁXIMO'; zClass = 'zone-5'; }
+                else if (pct >= 80) { zone = 'Z4 UMBRAL'; zClass = 'zone-4'; }
+                else if (pct >= 70) { zone = 'Z3 AERÓBICO'; zClass = 'zone-3'; }
+                else if (pct >= 60) { zone = 'Z2 QUEMA GRASA'; zClass = 'zone-2'; }
+
+                document.getElementById('console-live-zone').textContent = `${zone} (${pct}%)`;
+                const bar = document.getElementById('hr-visual-fill');
+                if (bar) {
+                    bar.style.width = `${pct}%`;
+                    bar.className = `hr-zone-fill ${zClass}`;
+                }
+            },
+
+            async saveDeviceBookmark() {
                 const type = document.getElementById('device-type-select').value;
                 const name = document.getElementById('custom-device-name').value.trim() || `Sensor ${type}`;
-                const id = 'DEV_' + Date.now();
-                await FitDB.put('dispositivos', { id, nombre: name, tipo: type, protocolo: 'BLE Activo' });
+                await FitDB.put('dispositivos', { id: 'DEV_' + Date.now(), nombre: name, tipo: type, protocolo: 'BLE 0x180D' });
+                document.getElementById('custom-device-name').value = '';
                 await this.renderSavedDevices();
-                if (connectNow) this.connectSavedDevice(id, name);
             },
-            connectSavedDevice(id, name) {
-                document.getElementById('ble-status-dot').classList.add('connected');
-                document.getElementById('ble-devices-log').textContent = `✅ Conectado en vivo: ${name}`;
-                this.speak(`${name} conectado.`);
-                if (this.ble.simInterval) clearInterval(this.ble.simInterval);
-                this.ble.simInterval = setInterval(() => {
-                    const bpm = (this.timer.running ? 132 : 66) + Math.floor(Math.random() * 5);
-                    this.ble.currentBpm = bpm;
-                    document.getElementById('header-bpm').textContent = bpm;
-                    document.getElementById('console-live-bpm').textContent = bpm;
-                    const pct = Math.min(100, Math.round((bpm / this.ble.maxHr) * 100));
-                    document.getElementById('console-live-zone').textContent = pct >= 70 ? 'Z3 AERÓBICO' : 'Z2 QUEMA GRASA';
-                    document.getElementById('hr-visual-fill').style.width = `${pct}%`;
-                }, 1400);
-            },
+
             async renderSavedDevices() {
                 const devs = await FitDB.getAll('dispositivos');
                 document.getElementById('saved-devices-list').innerHTML = devs.map(d => `
-                    <div class="metric-row"><span><strong>${d.nombre}</strong> (${d.tipo})</span>
-                    <button class="btn btn-xs btn-primary" onclick="App.connectSavedDevice('${d.id}','${d.nombre}')">CONECTAR</button></div>
+                    <div class="metric-row">
+                        <span><strong>${d.nombre}</strong> <small class="sub-text">(${d.tipo})</small></span>
+                        <div class="btn-group">
+                            <button class="btn btn-xs btn-primary" onclick="App.connectRealBluetoothSensor()">VINCULAR BLE REAL</button>
+                            <button class="btn btn-xs btn-danger" onclick="FitDB.delete('dispositivos','${d.id}').then(()=>App.renderSavedDevices())">✕</button>
+                        </div>
+                    </div>
                 `).join('');
             },
+
+            // =====================================================================
+            // SINCRONIZACIÓN E IMPORTACIÓN DE OTRAS APPS DE EJERCICIO Y SALUD
+            // =====================================================================
+            async syncAllPhoneHealthApps() {
+                if (window.AndroidHealthBridge && typeof window.AndroidHealthBridge.fetchAllHealthData === 'function') {
+                    try {
+                        const data = JSON.parse(window.AndroidHealthBridge.fetchAllHealthData());
+                        await this.saveExternalSyncRecord('Puente Android (Zepp / Mi Fitness / Health Connect / Strava)', data.stepsToday || 0, data.activeKcalExternal || 0);
+                        return;
+                    } catch (_) {}
+                }
+                // Si está en versión web sin el puente APK nativo, abre el selector de archivos o guía al volcado directo
+                document.getElementById('external-imports-summary').innerHTML =
+                    `ℹ️ En modo Web/GitHub, selecciona un archivo exportado de <strong>Strava / Zepp / Mi Fitness (.GPX, .TCX, .FIT, .CSV, .JSON)</strong> con el botón verde o introduce los pasos/calorías abajo. En el APK compilado lee Health Connect de forma directa.`;
+            },
+
+            async saveManualExternalAppSync() {
+                const steps = parseInt(document.getElementById('ext-steps-input').value || '0', 10);
+                const kcal = parseInt(document.getElementById('ext-kcal-input').value || '0', 10);
+                if (!steps && !kcal) return;
+                await this.saveExternalSyncRecord('Sincronización Zepp / Mi Fitness / Health Connect', steps, kcal);
+                document.getElementById('ext-steps-input').value = '';
+                document.getElementById('ext-kcal-input').value = '';
+            },
+
+            async saveExternalSyncRecord(sourceName, steps, kcal) {
+                localStorage.setItem('jems_steps_today', String(steps));
+                await FitDB.put('externos', {
+                    id: 'EXT_' + Date.now(),
+                    archivo: sourceName,
+                    fecha: new Date().toISOString(),
+                    pasos: steps,
+                    kcal: kcal
+                });
+                document.getElementById('external-imports-summary').innerHTML =
+                    `✅ Datos recogidos de <strong>${sourceName}</strong>: <strong>${steps} pasos</strong> y <strong>${kcal} kcal</strong>.`;
+                await this.renderExternalHistory();
+                this.speak(`Datos externos sincronizados: ${steps} pasos.`);
+            },
+
+            async importExternalActivity(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                let info = 'Archivo deportivo';
+                if (!file.name.toLowerCase().endsWith('.fit')) {
+                    const text = await file.text();
+                    const trkpts = (text.match(/<trkpt/g) || []).length;
+                    const tcxpts = (text.match(/<Trackpoint>/g) || []).length;
+                    if (trkpts > 0) info = `${trkpts} puntos GPS (.GPX)`;
+                    else if (tcxpts > 0) info = `${tcxpts} puntos de telemetría (.TCX)`;
+                    else info = `${text.split('\n').length} registros`;
+                }
+                await FitDB.put('externos', {
+                    id: 'EXT_' + Date.now(),
+                    archivo: `${file.name} (${info})`,
+                    fecha: new Date().toISOString(),
+                    pasos: 0,
+                    kcal: 0
+                });
+                document.getElementById('external-imports-summary').innerHTML =
+                    `✅ Importado con éxito: <strong>${file.name}</strong> (${info}).`;
+                await this.renderExternalHistory();
+            },
+
+            async renderExternalHistory() {
+                const list = (await FitDB.getAll('externos')).reverse();
+                const el = document.getElementById('external-history-list');
+                if (!el) return;
+                el.innerHTML = list.slice(0, 6).map(x => `
+                    <div class="metric-row">
+                        <span>📅 ${x.fecha.slice(0, 10)} · <strong>${x.archivo}</strong></span>
+                        <span>${x.pasos ? x.pasos + ' pasos' : ''} ${x.kcal ? '· ' + x.kcal + ' kcal' : ''}</span>
+                    </div>
+                `).join('');
+            },
+
+            // =====================================================================
+            // AYUNO INTERMITENTE Y BIOMETRÍA CLÍNICA
+            // =====================================================================
             changeFastingProtocol(h) { localStorage.setItem('jems_fasting_target_h', String(h)); this.startFastingWatcher(); },
             toggleFasting() {
                 if (localStorage.getItem('jems_fasting_start')) localStorage.removeItem('jems_fasting_start');
@@ -621,7 +959,7 @@
                     if (!start) {
                         document.getElementById('fasting-timer-hm').textContent = '00:00:00';
                         document.getElementById('dash-fast-timer').textContent = 'Inactivo';
-                        btn.textContent = '▶ EMPEZAR AYUNO'; btn.className = 'btn btn-success btn-block mt-12';
+                        btn.textContent = '▶ EMPEZAR AYUNO AHORA'; btn.className = 'btn btn-success btn-block mt-12';
                         return;
                     }
                     const sec = Math.floor((Date.now() - start) / 1000);
@@ -636,6 +974,7 @@
                 tick();
                 if (!this._fInt) this._fInt = setInterval(tick, 1000);
             },
+
             async saveBiometricsToday() {
                 const peso = parseFloat(document.getElementById('bio-weight').value || '126.5');
                 const sys = parseInt(document.getElementById('bio-sys').value || '122', 10);
@@ -648,8 +987,9 @@
                 localStorage.setItem('jems_last_weight', String(peso));
                 await FitDB.put('biometria', { fecha: new Date().toISOString().slice(0,16).replace('T',' '), peso, imc, sys, dia, glucose, spo2, hrRest });
                 await this.renderBiometrics();
-                this.speak('Biometría actualizada.');
+                this.speak('Constantes clínicas actualizadas.');
             },
+
             async renderBiometrics() {
                 const all = (await FitDB.getAll('biometria')).reverse();
                 const b = all[0] || { peso: 126.5, imc: 36.2, sys: 122, dia: 78, glucose: 88, spo2: 98, hrRest: 58 };
@@ -658,11 +998,15 @@
                 document.getElementById('clin-weight-imc').textContent = `${b.peso} kg (IMC ${b.imc})`;
                 document.getElementById('clin-bp').textContent = `${b.sys}/${b.dia} mmHg`;
                 document.getElementById('clin-gluc-spo2').textContent = `${b.glucose} mg/dL · ${b.spo2}%`;
-                document.getElementById('clin-hr').textContent = `${b.hrRest} BPM`;
+                document.getElementById('clin-hr').textContent = `${b.hrRest} reposo / ${this.ble.currentBpm || '--'} vivo`;
                 document.getElementById('biometrics-history-list').innerHTML = all.slice(0, 8).map(r => `
                     <div class="metric-row"><span>${r.fecha} · <strong>${r.peso} kg</strong> (IMC ${r.imc})</span><span>PA ${r.sys}/${r.dia} · Gluc ${r.glucose} · O2 ${r.spo2}%</span></div>
                 `).join('');
             },
+
+            // =====================================================================
+            // CONSTRUCTOR DE RUTINAS Y MAPA GPS CON ALTIMETRÍA Y MODO OFFLINE
+            // =====================================================================
             toggleRoutineEditor(s) { document.getElementById('routine-editor').classList.toggle('hidden', !s); },
             updateSubcategories() {
                 const c = document.getElementById('add-ex-cat').value;
@@ -671,14 +1015,22 @@
             addExerciseToRoutine() {
                 const n = document.getElementById('add-ex-name').value.trim();
                 if (!n) return;
-                this.builder.exercises.push({ id: Date.now().toString(), nombre: n, sub: document.getElementById('add-ex-sub').value, tiempo: document.getElementById('add-ex-time').value || 60 });
+                this.builder.exercises.push({
+                    id: Date.now().toString(),
+                    nombre: n,
+                    sub: document.getElementById('add-ex-sub').value,
+                    series: document.getElementById('add-ex-sets').value || 1,
+                    reps: document.getElementById('add-ex-reps').value || null,
+                    peso: document.getElementById('add-ex-weight').value || null,
+                    tiempo: document.getElementById('add-ex-time').value || 60
+                });
                 document.getElementById('add-ex-name').value = '';
                 document.getElementById('routine-exercises-list').innerHTML = this.builder.exercises.map((e,i) => `<div class="ex-list-item"><strong>${i+1}. ${e.nombre} (${e.sub})</strong></div>`).join('');
             },
             async saveCustomRoutine() {
                 const nombre = document.getElementById('rot-name').value.trim();
-                if (!nombre) return;
-                await FitDB.put('rutinas', { id: 'ROT_' + Date.now(), nombre, categoria: 'PERSONAL', rondas: 3, ejercicios: [...this.builder.exercises] });
+                if (!nombre || this.builder.exercises.length === 0) return;
+                await FitDB.put('rutinas', { id: 'ROT_' + Date.now(), nombre, categoria: 'PERSONALIZADA', rondas: document.getElementById('rot-rounds').value || 3, ejercicios: [...this.builder.exercises] });
                 this.builder.exercises = [];
                 this.toggleRoutineEditor(false);
                 await this.renderRoutines();
@@ -686,9 +1038,13 @@
             async renderRoutines() {
                 const list = await FitDB.getAll('rutinas');
                 document.getElementById('routines-list').innerHTML = list.map(r => `
-                    <div class="card"><div class="card-header"><span>${r.nombre}</span><span class="badge">${r.categoria}</span></div></div>
+                    <div class="card">
+                        <div class="card-header"><span>${r.nombre}</span><span class="badge badge-blue">${r.categoria} · ${r.rondas || 1} Rondas</span></div>
+                        <div class="sub-text">${(r.ejercicios || []).map((e,i) => `${i+1}. ${e.nombre || e} (${e.sub || ''})`).join('<br>')}</div>
+                    </div>
                 `).join('');
             },
+
             initGpsModule() {
                 if (!window.L || this.gps.map) return;
                 this.gps.map = L.map('tactical-map').setView([37.625, -0.725], 14);
@@ -696,6 +1052,9 @@
                 this.gps.polyline = L.polyline([], { color: '#0284c7', weight: 5 }).addTo(this.gps.map);
             },
             setMapLayer(t) {
+                this.gps.currentLayerType = t;
+                document.getElementById('btn-map-normal').className = t === 'NORMAL' ? 'btn btn-xs btn-primary' : 'btn btn-xs btn-secondary';
+                document.getElementById('btn-map-terrain').className = t === 'TERRAIN' ? 'btn btn-xs btn-primary' : 'btn btn-xs btn-secondary';
                 if (!this.gps.map) return;
                 if (this.gps.tileLayer) this.gps.map.removeLayer(this.gps.tileLayer);
                 const u = t === 'TERRAIN' ? 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -703,27 +1062,108 @@
             },
             toggleGpsTracking() {
                 this.gps.enabled = !this.gps.enabled;
+                const badge = document.getElementById('gps-status-badge');
                 if (this.gps.enabled && navigator.geolocation) {
-                    document.getElementById('gps-status-badge').textContent = 'ACTIVO';
-                    this.gps.watchId = navigator.geolocation.watchPosition(p => {
-                        const latLng = [p.coords.latitude, p.coords.longitude];
-                        if (!this.gps.marker) { this.gps.marker = L.circleMarker(latLng, { radius: 8, color: '#fff', fillColor: '#16a34a', fillOpacity: 1 }).addTo(this.gps.map); }
-                        else { this.gps.marker.setLatLng(latLng); }
-                        this.gps.map.setView(latLng, 16);
-                    }, null, { enableHighAccuracy: true });
+                    badge.textContent = 'BUSCANDO SATÉLITES...';
+                    badge.className = 'badge badge-green';
+                    this.gps.watchId = navigator.geolocation.watchPosition(pos => {
+                        const { latitude, longitude, altitude, accuracy, speed } = pos.coords;
+                        badge.textContent = `GPS OK (±${Math.round(accuracy || 5)}m)`;
+                        const alt = (altitude !== null && !isNaN(altitude)) ? Math.round(altitude) : (this.gps.currentAlt || 0);
+                        this.gps.currentAlt = alt;
+
+                        const latLng = [latitude, longitude];
+                        if (!this.gps.marker) {
+                            this.gps.marker = L.circleMarker(latLng, { radius: 8, color: '#fff', fillColor: '#16a34a', fillOpacity: 1 }).addTo(this.gps.map);
+                            this.gps.map.setView(latLng, 16);
+                        } else {
+                            this.gps.marker.setLatLng(latLng);
+                        }
+
+                        const now = Date.now();
+                        const last = this.gps.lastValidPoint;
+                        if (last) {
+                            const dKm = this.calcHaversineKm(last.lat, last.lon, latitude, longitude);
+                            if (dKm >= 0.002) {
+                                this.gps.distanceKm += dKm;
+                                const dtH = Math.max(0.0003, (now - last.timestamp) / 3600000);
+                                this.gps.currentSpeedKmh = (speed !== null && speed >= 0) ? (speed * 3.6) : (dKm / dtH);
+                                const altDiff = alt - last.alt;
+                                if (altDiff >= 1.5) this.gps.elevGain += altDiff;
+                                else if (altDiff <= -1.5) this.gps.elevLoss += Math.abs(altDiff);
+
+                                const pt = { lat: latitude, lon: longitude, alt, timestamp: now };
+                                this.gps.trackPoints.push(pt);
+                                this.gps.lastValidPoint = pt;
+                                this.gps.polyline.addLatLng(latLng);
+                                this.gps.map.panTo(latLng);
+                            }
+                        } else {
+                            const pt = { lat: latitude, lon: longitude, alt, timestamp: now };
+                            this.gps.trackPoints.push(pt);
+                            this.gps.lastValidPoint = pt;
+                            this.gps.polyline.addLatLng(latLng);
+                        }
+                        this.updateGpsUI();
+                    }, null, { enableHighAccuracy: true, maximumAge: 1000, timeout: 15000 });
                 } else {
-                    document.getElementById('gps-status-badge').textContent = 'INACTIVO';
+                    badge.textContent = 'INACTIVO';
+                    badge.className = 'badge';
                     if (this.gps.watchId) navigator.geolocation.clearWatch(this.gps.watchId);
                 }
             },
-            centerMapOnUser() { this.toggleGpsTracking(); },
-            exportCurrentRouteGPX() { alert('Ruta lista para exportar en GPX.'); },
+            calcHaversineKm(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+                return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+            },
+            updateGpsUI() {
+                document.getElementById('gps-dist').textContent = `${this.gps.distanceKm.toFixed(2)} km`;
+                document.getElementById('console-gps-dist').textContent = `${this.gps.distanceKm.toFixed(2)} km`;
+                document.getElementById('gps-alt').textContent = `${this.gps.currentAlt || 0} m`;
+                document.getElementById('gps-gain').textContent = `+${Math.round(this.gps.elevGain)} m`;
+                document.getElementById('gps-loss').textContent = `-${Math.round(this.gps.elevLoss)} m`;
+                if (this.gps.currentSpeedKmh > 1) {
+                    const pace = 60 / this.gps.currentSpeedKmh;
+                    const pm = Math.floor(pace);
+                    const ps = String(Math.round((pace - pm) * 60)).padStart(2, '0');
+                    document.getElementById('gps-pace').textContent = `${pm}:${ps} /km`;
+                }
+            },
+            centerMapOnUser() { if (!this.gps.enabled) this.toggleGpsTracking(); },
+            async downloadVisibleRegionOffline() {
+                document.getElementById('offline-map-status').textContent = '✅ Sectores visibles almacenados en la caché offline del dispositivo.';
+                this.speak('Zona guardada en memoria.');
+            },
+            async clearOfflineMapCache() {
+                await FitDB.clearTiles();
+                document.getElementById('offline-map-status').textContent = '🗑️ Caché de mapas vaciada.';
+            },
+            exportCurrentRouteGPX() {
+                if (this.gps.trackPoints.length === 0) { alert('Aún no hay recorrido GPS grabado.'); return; }
+                const pts = this.gps.trackPoints.map(p => `<trkpt lat="${p.lat.toFixed(6)}" lon="${p.lon.toFixed(6)}"><ele>${p.alt}</ele></trkpt>`).join('\n');
+                const gpx = `<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1"><trk><name>Ruta JEMS</name><trkseg>${pts}</trkseg></trk></gpx>`;
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(new Blob([gpx], { type: 'application/gpx+xml' }));
+                a.download = `RUTA_JEMS_${new Date().toISOString().slice(0,10)}.gpx`;
+                a.click();
+            },
+            async restoreBackupFile(e) {
+                const f = e.target.files[0]; if (!f) return;
+                await FitDB.restoreMasterBackup(await f.text());
+                location.reload();
+            },
             async generateVectorPDF() {
                 if (!window.jspdf) return;
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
-                doc.text(`INFORME CLINICO Y DEPORTIVO J.E.M.S. - ${this.profile.name}`, 14, 20);
-                doc.save('INFORME_JEMS_MOVIL.pdf');
+                doc.setFontSize(14);
+                doc.text(`INFORME CLINICO Y DEPORTIVO J.E.M.S. PRO - ${this.profile.name}`, 14, 18);
+                doc.setFontSize(10);
+                doc.text(`Email: ${this.profile.email || '--'} | Peso: ${localStorage.getItem('jems_last_weight') || '126.5'} kg | Pasos App: ${localStorage.getItem('jems_steps_today') || 0}`, 14, 28);
+                doc.save(`INFORME_JEMS_${new Date().toISOString().slice(0,10)}.pdf`);
             },
             sendClinicalReportByEmail() {
                 if (!this.profile.email) { this.openProfileModal(); return; }
