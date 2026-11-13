@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>J.E.M.S. PRO v4.0 - Salud, Entrenamiento & Telemetría</title>
+    <title>J.E.M.S. PRO v5.0 - Salud, Entrenamiento & Telemetría</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -21,31 +21,20 @@
             --green: #16a34a;
             --orange: #ea580c;
             --red: #dc2626;
-            --gold: #eab308;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg-app); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        /* PANTALLA TÁCTICA DE BOLSILLO (EVITA QUE ANDROID CORTE EL GPS AL APAGAR PANTALLA) */
+        /* MODO PANTALLA NEGRA DE BOLSILLO */
         .pocket-lock-overlay {
             position: fixed; inset: 0;
-            background: #000000;
-            color: #38bdf8;
-            z-index: 99999;
-            display: flex; flex-direction: column;
+            background: #000000; color: #38bdf8;
+            z-index: 99999; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             text-align: center; padding: 24px;
         }
-        .pocket-lock-stats {
-            font-size: 2.4rem; font-weight: 900; color: #ffffff;
-            font-variant-numeric: tabular-nums; margin: 14px 0;
-        }
-        .pocket-unlock-btn {
-            margin-top: 28px; padding: 16px 28px;
-            border: 2px solid #38bdf8; background: #0f172a;
-            color: #38bdf8; border-radius: 999px;
-            font-weight: 800; font-size: 0.9rem; cursor: pointer;
-        }
+        .pocket-lock-stats { font-size: 2.5rem; font-weight: 900; color: #ffffff; font-variant-numeric: tabular-nums; margin: 14px 0; }
+        .pocket-unlock-btn { margin-top: 28px; padding: 16px 28px; border: 2px solid #38bdf8; background: #0f172a; color: #38bdf8; border-radius: 999px; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
 
         /* CABECERA */
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0f172a; color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.15); z-index: 20; }
@@ -76,8 +65,29 @@
         .qn-value { font-size: 1.02rem; font-weight: 900; color: var(--text-main); margin: 3px 0; font-variant-numeric: tabular-nums; }
         .qn-link { font-size: 0.68rem; color: var(--accent); font-weight: 700; }
 
-        .select-light-dropdown { width: 100%; background-color: #ffffff; color: #0f172a; border: 2px solid #0284c7; padding: 11px 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; outline: none; }
+        .select-light-dropdown { width: 100%; background-color: #ffffff; color: #0f172a; border: 2px solid #0284c7; padding: 10px 12px; border-radius: 10px; font-size: 0.84rem; font-weight: 700; outline: none; }
         .select-light-dropdown option { background-color: #ffffff; color: #0f172a; }
+
+        /* CONFIGURADOR DE TIEMPO EN CONSOLA */
+        .timer-config-box {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+        .timer-config-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .timer-config-grid div small { display: block; font-size: 0.6rem; font-weight: 800; color: var(--text-muted); margin-bottom: 2px; }
+        .input-mini {
+            width: 100%; background: #fff; border: 1px solid #94a3b8;
+            border-radius: 7px; padding: 7px 6px; font-size: 0.85rem;
+            font-weight: 800; text-align: center; color: var(--text-main);
+        }
 
         .console-card { border-top: 4px solid var(--accent); }
         .console-header { display: flex; justify-content: space-between; align-items: center; }
@@ -85,7 +95,7 @@
         .station-subtitle { font-size: 0.78rem; color: var(--text-muted); margin: 6px 0; font-weight: 600; }
         .time-hr-split { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 10px; background: #0f172a; color: #ffffff; padding: 12px; border-radius: 12px; margin: 8px 0; align-items: center; }
         .time-box small, .hr-live-box small { font-size: 0.6rem; color: #94a3b8; font-weight: 700; display: block; }
-        .timer-giant { font-size: 2.6rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.1; margin-top: 2px; }
+        .timer-giant { font-size: 2.55rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.1; margin-top: 2px; }
         .hr-live-box { border-left: 1px solid #334155; padding-left: 10px; text-align: center; }
         .bpm-giant { font-size: 2rem; font-weight: 900; color: #f87171; font-variant-numeric: tabular-nums; line-height: 1.1; }
         .zone-pill { display: inline-block; font-size: 0.6rem; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: #1e293b; color: #38bdf8; margin-top: 3px; }
@@ -113,7 +123,7 @@
         .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
         .btn-stack { display: flex; flex-direction: column; gap: 8px; }
         .btn { flex: 1; border: none; border-radius: 10px; padding: 11px 10px; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-align: center; }
-        .btn-sm { padding: 8px 10px; font-size: 0.74rem; }
+        .btn-sm { padding: 8px 10px; font-size: 0.73rem; }
         .btn-xs { padding: 6px 8px; font-size: 0.68rem; flex: initial; }
         .btn-block { width: 100%; }
         .btn-primary { background: var(--accent); color: #fff; }
@@ -123,7 +133,7 @@
         .btn-secondary { background: #e2e8f0; color: #0f172a; }
         .btn-dark { background: #0f172a; color: #38bdf8; border: 1px solid #334155; }
 
-        /* MAPA GPS CON MODO PANTALLA COMPLETA Y GESTOS TÁCTILES HABILITADOS */
+        /* MAPA GPS */
         .gps-map-box {
             width: 100%; height: 280px;
             background: #cbd5e1; border: 2px solid var(--border);
@@ -132,8 +142,7 @@
             touch-action: pan-x pan-y pinch-zoom !important;
         }
         .gps-map-box.fullscreen-map {
-            position: fixed !important;
-            top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+            position: fixed !important; inset: 0 !important;
             width: 100vw !important; height: 100vh !important;
             z-index: 9000 !important; border-radius: 0 !important;
         }
@@ -163,10 +172,9 @@
 
         .builder-subcard { background: var(--bg-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px; }
         .ex-list-item { background: var(--bg-soft); border-left: 4px solid var(--accent); padding: 9px; border-radius: 8px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-remove-ex { background: var(--red); color: #fff; border: none; border-radius: 6px; padding: 6px 10px; font-weight: 800; }
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.78); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 5000; }
-        .modal-card { background: #fff; border-radius: 16px; padding: 20px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.82); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 5000; }
+        .modal-card { background: #fff; border-radius: 16px; padding: 20px; width: 100%; max-width: 430px; max-height: 92vh; overflow-y: auto; }
 
         .bottom-nav { position: fixed; left: 10px; right: 10px; bottom: 22px; height: 62px; background: #0f172a; border: 1px solid #334155; border-radius: 16px; display: grid; grid-template-columns: repeat(5, 1fr); box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35); z-index: 1000; }
         .nav-item { background: none; border: none; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; }
@@ -181,25 +189,54 @@
 </head>
 <body>
 
-    <!-- MODO BLOQUEO TÁCTICO DE BOLSILLO (PANTALLA NEGRA OLED PARA NO PERDER GPS NI BLUETOOTH) -->
+    <!-- REPRODUCTOR DE AUDIO NATIVO OCULTO PARA MANTENER VIVO EL GPS CON EL BOTÓN FÍSICO DE APAGAR PANTALLA -->
+    <audio id="bg-keepalive-audio" loop playsinline style="display:none;"></audio>
+
+    <!-- PANTALLA NEGRA DE BOLSILLO (OPCIONAL SI SE QUIERE VER EL TIEMPO GASTANDO CERO BATERÍA) -->
     <div id="pocket-lock-screen" class="pocket-lock-overlay hidden">
-        <div style="font-size:0.8rem; font-weight:800; letter-spacing:1px;">🔒 MODO BOLSILLO ACTIVO (GPS + BLE GRABANDO AL 100%)</div>
+        <div style="font-size:0.8rem; font-weight:800; letter-spacing:1px;">🔒 MODO BOLSILLO ACTIVO (GPS + BLE GRABANDO)</div>
         <div class="pocket-lock-stats" id="pocket-live-timer">00:00</div>
         <div style="font-size:1.25rem; color:#f87171; font-weight:800;">♥ <span id="pocket-live-bpm">--</span> BPM · <span id="pocket-live-dist" style="color:#22c55e;">0.00 km</span></div>
-        <p style="font-size:0.75rem; color:#64748b; max-width:280px; margin-top:12px;">
-            Usa esta pantalla negra en vez de pulsar el botón físico de apagado del teléfono para que el navegador no corte el trazado GPS ni la banda pectoral.
-        </p>
-        <button class="pocket-unlock-btn" onclick="App.togglePocketLock(false)">🔓 PULSAR PARA DESBLOQUEAR PANTALLA</button>
+        <button class="pocket-unlock-btn" onclick="App.togglePocketLock(false)">🔓 DESBLOQUEAR PANTALLA</button>
     </div>
 
-    <!-- BOTÓN FLOTANTE PARA SALIR DE MAPA A PANTALLA COMPLETA -->
     <button id="btn-exit-fullscreen-map" class="map-Exit-fs-btn hidden" onclick="App.toggleMapFullscreen()">✕ CERRAR PANTALLA COMPLETA</button>
 
-    <!-- MODAL DE IDENTIFICACIÓN DE USUARIO -->
+    <!-- NUEVO: MODAL DE RESUMEN E INFORME INMEDIATO AL TERMINAR DE ENTRENAR -->
+    <div id="modal-post-workout" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="badge badge-green">✅ ENTRENAMIENTO COMPLETADO</span>
+                <button class="btn btn-xs btn-secondary" onclick="App.closePostWorkoutModal()">✕ CERRAR</button>
+            </div>
+            <h2 class="mt-6" id="pw-title">Resumen de la Sesión</h2>
+            <p class="sub-text" id="pw-date">--</p>
+
+            <div class="clinical-summary-grid mt-10">
+                <div class="clin-box"><small>TIEMPO TOTAL</small><strong id="pw-duration">00:00</strong></div>
+                <div class="clin-box"><small>DISTANCIA GPS</small><strong id="pw-distance">0.00 km</strong></div>
+                <div class="clin-box"><small>DESNIVEL (+ / -)</small><strong id="pw-elevation">+0m / -0m</strong></div>
+                <div class="clin-box"><small>CALORÍAS ACTIVAS</small><strong id="pw-kcal">0 kcal</strong></div>
+                <div class="clin-box"><small>FC MEDIA / MÁX</small><strong id="pw-hr">-- / -- BPM</strong></div>
+                <div class="clin-box"><small>ESFUERZO TRIMP</small><strong id="pw-trimp">0 pts</strong></div>
+            </div>
+
+            <div class="status-banner mt-10" id="pw-advice">Excelente sesión. Datos guardados en el expediente.</div>
+
+            <div class="btn-stack mt-12">
+                <button class="btn btn-success" onclick="App.generateLastWorkoutPDF()">📄 DESCARGAR INFORME DE ESTA SESIÓN (PDF)</button>
+                <button class="btn btn-primary" onclick="App.sendLastWorkoutByEmail()">✉️ ENVIAR INFORME DE LA SESIÓN A MI CORREO</button>
+                <button class="btn btn-secondary" onclick="App.exportCurrentRouteGPX()">📥 DESCARGAR RUTA GPS (.GPX)</button>
+                <button class="btn btn-dark" onclick="App.closePostWorkoutModal()">CONTINUAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE IDENTIFICACIÓN -->
     <div id="modal-onboarding" class="modal-overlay hidden">
         <div class="modal-card">
             <h2>Identificación y Telemetría</h2>
-            <p class="sub-text">Configura tus datos para personalizar las zonas cardíacas, el IMC y el envío de informes a tu correo.</p>
+            <p class="sub-text">Configura tus datos para personalizar zonas cardíacas, IMC e informes de salud.</p>
             <label class="field-label mt-8">Nombre completo</label>
             <input type="text" id="prof-name" class="input-pro" placeholder="Juan Enrique Martínez">
             <label class="field-label mt-8">Correo electrónico (para informes)</label>
@@ -213,34 +250,29 @@
         </div>
     </div>
 
-    <!-- MODAL DE DONACIONES / APOYAR EL PROYECTO -->
+    <!-- MODAL DE DONACIONES -->
     <div id="modal-donate" class="modal-overlay hidden">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h2>☕ Apoyar el Proyecto</h2>
                 <button class="btn btn-xs btn-secondary" onclick="App.toggleDonateModal(false)">✕</button>
             </div>
-            <p class="sub-text mt-6">Si esta aplicación te ayuda en tus entrenamientos, rutas y control de salud, puedes apoyar su desarrollo continuo y mantenimiento gratuito:</p>
-
+            <p class="sub-text mt-6">Si te gusta la aplicación y te ayuda en tus entrenamientos, puedes realizar una donación para apoyar el proyecto:</p>
             <div class="btn-stack mt-10">
                 <a id="donate-link-paypal" href="https://paypal.me/" target="_blank" rel="noopener" class="btn btn-primary" style="text-decoration:none;">💳 Donar con PayPal</a>
-                <a id="donate-link-kofi" href="https://ko-fi.com/" target="_blank" rel="noopener" class="btn btn-warning" style="text-decoration:none;">☕ Invitar a un café (Ko-fi / BuyMeACoffee)</a>
+                <a id="donate-link-kofi" href="https://ko-fi.com/" target="_blank" rel="noopener" class="btn btn-warning" style="text-decoration:none;">☕ Invitar a un café (Ko-fi)</a>
                 <div class="card mt-6" style="background:var(--bg-soft); text-align:center;">
-                    <small class="field-label">📱 APORTACIÓN POR BIZUM / CONTACTO</small>
-                    <strong id="donate-bizum-display" style="font-size:1rem; color:var(--text-main); display:block; margin-top:4px;">Configura tu enlace o Bizum abajo</strong>
+                    <small class="field-label">📱 BIZUM / APORTACIÓN DIRECTA</small>
+                    <strong id="donate-bizum-display" style="font-size:0.95rem; display:block; margin-top:4px;">Configura tus datos abajo</strong>
                 </div>
             </div>
-
             <details class="mt-10">
-                <summary class="field-label" style="cursor:pointer; color:var(--accent);">⚙️ Configurar mis enlaces de donación (Creador)</summary>
+                <summary class="field-label" style="cursor:pointer; color:var(--accent);">⚙️ Configurar enlaces de donación</summary>
                 <div class="mt-6">
-                    <label class="field-label">Enlace PayPal.me</label>
                     <input type="url" id="cfg-paypal" class="input-pro" placeholder="https://paypal.me/tuusuario">
-                    <label class="field-label mt-6">Enlace Ko-fi / BuyMeACoffee</label>
-                    <input type="url" id="cfg-kofi" class="input-pro" placeholder="https://ko-fi.com/tuusuario">
-                    <label class="field-label mt-6">Texto Bizum / Info adicional</label>
-                    <input type="text" id="cfg-bizum" class="input-pro" placeholder="Bizum al +34 600 000 000 (Concepto: Apoyo App)">
-                    <button class="btn btn-success btn-block mt-8" onclick="App.saveDonationConfig()">💾 GUARDAR CONFIGURACIÓN DE DONACIÓN</button>
+                    <input type="url" id="cfg-kofi" class="input-pro mt-6" placeholder="https://ko-fi.com/tuusuario">
+                    <input type="text" id="cfg-bizum" class="input-pro mt-6" placeholder="Bizum: +34 600 000 000">
+                    <button class="btn btn-success btn-block mt-8" onclick="App.saveDonationConfig()">💾 GUARDAR</button>
                 </div>
             </details>
         </div>
@@ -251,7 +283,7 @@
         <div class="brand" onclick="App.openProfileModal()">
             <div class="avatar-circle" id="user-avatar">JE</div>
             <div>
-                <h1>J.E.M.S. <span class="accent">PRO v4.0</span></h1>
+                <h1>J.E.M.S. <span class="accent">PRO v5.0</span></h1>
                 <small id="header-user-info">Toca para editar perfil</small>
             </div>
         </div>
@@ -283,33 +315,59 @@
                 </button>
             </div>
 
-            <!-- DESPLEGABLE CLARO DE MODOS RÁPIDOS -->
+            <!-- MODALIDAD Y CONFIGURADOR TOTAL DE TIEMPOS DE ENTRENAMIENTO -->
             <div class="card mt-10">
-                <label class="field-label">⚡ MODALIDAD RÁPIDA DE ENTRENAMIENTO</label>
+                <label class="field-label">⚡ 1. SELECCIONAR MODALIDAD DE ENTRENAMIENTO</label>
                 <select id="quick-mode-select" class="select-light-dropdown mt-6" onchange="App.onQuickModeSelected(this.value)">
-                    <option value="CACO_3_1">🚶/🏃 CACO Estándar (3 min Caminar / 1 min Correr x 8)</option>
-                    <option value="CACO_2_2">🚶/🏃 CACO Intenso (2 min Caminar / 2 min Correr x 10)</option>
-                    <option value="HIKING_GPS">🥾 Senderismo / Trekking / Montaña (con GPS y Caminos)</option>
-                    <option value="RUN_FREE">🏃 Carrera Continua en Calle / Pista (con GPS)</option>
-                    <option value="WALK_ACTIVE">🚶 Caminata Activa / Ronda / Marcha (con GPS)</option>
-                    <option value="HYROX_8">🔥 Simulación HYROX (8 Estaciones: 4' Trabajo / 2' Transición)</option>
-                    <option value="CROSSFIT_EMOM">🏋️ CrossFit EMOM (1 min por ronda x 15 min)</option>
-                    <option value="CROSSFIT_AMRAP">🏋️ CrossFit AMRAP (12 minutos continuos)</option>
-                    <option value="TABATA">⚡ Tabata HIIT (20 seg Trabajo / 10 seg Descanso x 8)</option>
+                    <option value="CACO_3_1">🚶/🏃 CACO (Intervalos Caminar / Correr)</option>
+                    <option value="HIKING_GPS">🥾 Senderismo / Montaña (con GPS y Desnivel)</option>
+                    <option value="RUN_FREE">🏃 Carrera en Calle / Pista (con GPS)</option>
+                    <option value="WALK_ACTIVE">🚶 Caminata Activa / Marcha (con GPS)</option>
+                    <option value="HYROX_8">🔥 Simulación HYROX (Estaciones + Carrera)</option>
+                    <option value="CROSSFIT_EMOM">🏋️ CrossFit EMOM / AMRAP / WOD</option>
+                    <option value="TABATA">⚡ Tabata / Series de Fuerza</option>
                 </select>
+
+                <!-- NUEVO: CONFIGURADOR PERSONALIZABLE DE TIEMPO, DESCANSO, RONDAS Y CRONÓMETRO LIBRE -->
+                <div class="timer-config-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="field-label" style="color:var(--accent);">⏱️ 2. CONFIGURAR TIEMPOS A TU GUSTO</span>
+                        <label style="font-size:0.72rem; font-weight:800; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                            <input type="checkbox" id="cfg-free-countup" onchange="App.applyCustomTimerSettings()"> Crono Libre (00:00 → ∞)
+                        </label>
+                    </div>
+                    <div class="timer-config-grid" id="timer-inputs-row">
+                        <div>
+                            <small>TRABAJO (MIN)</small>
+                            <input type="number" id="cfg-work-min" class="input-mini" value="3" min="0" onchange="App.applyCustomTimerSettings()">
+                        </div>
+                        <div>
+                            <small>TRABAJO (SEG)</small>
+                            <input type="number" id="cfg-work-sec" class="input-mini" value="0" min="0" max="59" onchange="App.applyCustomTimerSettings()">
+                        </div>
+                        <div>
+                            <small>DESCANSO (SEG)</small>
+                            <input type="number" id="cfg-rest-sec" class="input-mini" value="60" min="0" onchange="App.applyCustomTimerSettings()">
+                        </div>
+                        <div>
+                            <small>Nº RONDAS</small>
+                            <input type="number" id="cfg-rounds" class="input-mini" value="8" min="1" onchange="App.applyCustomTimerSettings()">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- CONSOLA CENTRAL: TIEMPO + PULSACIONES EN VIVO -->
+            <!-- CONSOLA CENTRAL: TIEMPO + PULSACIONES EN VIVO + BOTÓN DE INFORME DIRECTO -->
             <div class="card console-card mt-10">
                 <div class="console-header">
                     <span class="phase-pill" id="timer-phase-label">LISTO PARA ENTRENAR</span>
-                    <span class="badge" id="active-mode-badge">CACO 3:1</span>
+                    <span class="badge" id="active-mode-badge">CACO</span>
                 </div>
-                <div class="station-subtitle" id="active-station-detail">Modalidad activa lista</div>
+                <div class="station-subtitle" id="active-station-detail">Tiempos configurables arriba</div>
 
                 <div class="time-hr-split">
                     <div class="time-box">
-                        <small>TIEMPO DE FASE / SESIÓN</small>
+                        <small id="timer-direction-label">TIEMPO DE FASE / SESIÓN</small>
                         <div class="timer-giant" id="main-workout-timer">03:00</div>
                     </div>
                     <div class="hr-live-box">
@@ -334,30 +392,29 @@
                 <div class="btn-group mt-10">
                     <button class="btn btn-success" onclick="App.startWorkoutTimer()">▶ INICIAR</button>
                     <button class="btn btn-warning" onclick="App.pauseWorkoutTimer()">⏸ PAUSA</button>
-                    <button class="btn btn-danger" onclick="App.finishAndSaveWorkout()">⏹ GUARDAR</button>
+                    <button class="btn btn-danger" onclick="App.finishAndSaveWorkout()">⏹ FIN E INFORME</button>
                 </div>
                 <div class="btn-group mt-8">
-                    <button class="btn btn-sm btn-dark" onclick="App.togglePocketLock(true)">🔒 BLOQUEO BOLSILLO (NO CORTA GPS)</button>
-                    <button class="btn btn-sm btn-secondary" id="btn-toggle-voice" onclick="App.toggleVoice()">🔊 VOZ: ON</button>
+                    <button class="btn btn-sm btn-primary" onclick="App.openLastWorkoutSummary()">📄 VER INFORME SESIÓN</button>
+                    <button class="btn btn-sm btn-dark" onclick="App.togglePocketLock(true)">🔒 MODO BOLSILLO</button>
+                    <button class="btn btn-sm btn-secondary" id="btn-toggle-voice" onclick="App.toggleVoice()">🔊 VOZ</button>
                 </div>
             </div>
 
-            <!-- MAPA GPS CON SENDEROS, TOPO, SATÉLITE HÍBRIDO Y ZOOM PANORÁMICO LIBRE -->
+            <!-- MAPA GPS CON ESCUDO DE AUDIO NATIVO PARA CUANDO SE APAGA LA PANTALLA -->
             <div class="card mt-10">
                 <div class="card-header">
-                    <span>🛰️ GPS: CAMINOS, SENDEROS, CARRETERAS Y SATÉLITE</span>
+                    <span>🛰️ GPS: SENDEROS, CARRETERAS Y SATÉLITE</span>
                     <span class="badge" id="gps-status-badge">INACTIVO</span>
                 </div>
 
-                <!-- Selector de 4 Capas Cartográficas -->
                 <div class="btn-group mb-8">
-                    <button class="btn btn-xs btn-primary" id="btn-map-trails" onclick="App.setMapLayer('TRAILS')">🥾 SENDEROS/CAMINOS</button>
+                    <button class="btn btn-xs btn-primary" id="btn-map-trails" onclick="App.setMapLayer('TRAILS')">🥾 SENDEROS</button>
                     <button class="btn btn-xs btn-secondary" id="btn-map-normal" onclick="App.setMapLayer('NORMAL')">🚗 CARRETERAS</button>
                     <button class="btn btn-xs btn-secondary" id="btn-map-terrain" onclick="App.setMapLayer('TERRAIN')">⛰️ TOPO</button>
                     <button class="btn btn-xs btn-secondary" id="btn-map-sat" onclick="App.setMapLayer('SATELLITE')">🛰️ SATÉLITE HD</button>
                 </div>
 
-                <!-- Controles de GPS, Auto-Seguimiento y Pantalla Completa Panorámica -->
                 <div class="btn-group mb-8">
                     <button class="btn btn-xs btn-success" id="btn-toggle-gps" onclick="App.toggleGpsTracking()">▶ ACTIVAR GPS</button>
                     <button class="btn btn-xs btn-primary" id="btn-follow-gps" onclick="App.toggleAutoFollow()">🎯 SEGUIR: ON</button>
@@ -365,11 +422,9 @@
                     <button class="btn btn-xs btn-secondary" onclick="App.exportCurrentRouteGPX()">📥 .GPX</button>
                 </div>
 
-                <div class="btn-group mb-8">
-                    <button class="btn btn-xs btn-secondary" onclick="App.downloadVisibleRegionOffline()">📦 GUARDAR ZONA OFFLINE</button>
-                    <button class="btn btn-xs btn-secondary" onclick="App.clearOfflineMapCache()">🗑️ LIMPIAR CACHÉ</button>
+                <div id="offline-map-status" class="sub-text mb-8">
+                    🛡️ Escudo MediaSession activo: Para apagar la pantalla con el botón físico sin que Android corte el GPS de Chrome, pon en Ajustes de Chrome > Ubicación: "Permitir todo el tiempo" y Batería: "Sin restricciones".
                 </div>
-                <div id="offline-map-status" class="sub-text mb-8">💡 Puedes alejar/acercar el mapa con dos dedos para ver toda la panorámica sin que se bloquee.</div>
 
                 <div id="tactical-map" class="gps-map-box"></div>
 
@@ -394,7 +449,7 @@
                 </div>
                 <div id="routine-editor" class="hidden mt-10">
                     <div class="grid-2">
-                        <input type="text" id="rot-name" class="input-pro" placeholder="Nombre de la Rutina o Ruta">
+                        <input type="text" id="rot-name" class="input-pro" placeholder="Nombre de la Rutina">
                         <input type="number" id="rot-rounds" class="input-pro" value="3" placeholder="Rondas">
                     </div>
                     <div class="builder-subcard mt-8">
@@ -408,7 +463,7 @@
                             </select>
                             <select id="add-ex-sub" class="select-light-dropdown"></select>
                         </div>
-                        <input type="text" id="add-ex-name" class="input-pro mt-8" placeholder="Nombre (ej. Ruta Senderismo, Remo TRX, Thrusters...)">
+                        <input type="text" id="add-ex-name" class="input-pro mt-8" placeholder="Nombre del ejercicio o tramo">
                         <div class="grid-4 mt-8">
                             <input type="number" id="add-ex-sets" class="input-pro" placeholder="Series">
                             <input type="number" id="add-ex-reps" class="input-pro" placeholder="Reps">
@@ -435,13 +490,13 @@
                     <button class="btn btn-xs btn-secondary" onclick="App.switchView('view-dashboard')">← VOLVER</button>
                 </div>
                 <select id="select-fasting-type" class="select-light-dropdown mt-6" onchange="App.changeFastingProtocol(this.value)">
-                    <option value="14" selected>Protocolo 14/10 (14h Ayuno / 10h Ventana - Por defecto)</option>
-                    <option value="16">Protocolo 16/8 (16h Ayuno / 8h Ventana)</option>
-                    <option value="18">Protocolo 18/6 (18h Ayuno / 6h Ventana)</option>
-                    <option value="20">Protocolo 20/4 (Guerrero)</option>
+                    <option value="14" selected>Protocolo 14/10 (Por defecto)</option>
+                    <option value="16">Protocolo 16/8</option>
+                    <option value="18">Protocolo 18/6</option>
+                    <option value="20">Protocolo 20/4</option>
                 </select>
                 <div class="fasting-hero-box mt-10">
-                    <div class="sub-text" id="fasting-phase-badge" style="color:#94a3b8">VENTANA DE ALIMENTACIÓN ABIERTA</div>
+                    <div class="sub-text" id="fasting-phase-badge" style="color:#94a3b8">VENTANA ABIERTA</div>
                     <div class="fasting-clock" id="fasting-timer-hm">00:00:00</div>
                     <div class="fasting-progress-wrap"><div class="fasting-progress-fill" id="fasting-progress-bar"></div></div>
                     <div class="fasting-meta-row mt-8">
@@ -451,7 +506,6 @@
                     </div>
                     <button class="btn btn-success btn-block mt-12" id="btn-toggle-fasting" onclick="App.toggleFasting()">▶ EMPEZAR AYUNO AHORA</button>
                 </div>
-                <div id="fasting-history-list" class="mt-10"></div>
             </div>
         </section>
 
@@ -478,82 +532,54 @@
                     <div><label class="field-label">O2 (%SpO2)</label><input type="number" id="bio-spo2" class="input-pro" placeholder="98"></div>
                     <div><label class="field-label">FC Reposo</label><input type="number" id="bio-hr-rest" class="input-pro" placeholder="58"></div>
                 </div>
-                <div class="grid-3 mt-8">
-                    <div><label class="field-label">Cintura (cm)</label><input type="number" id="bio-waist" class="input-pro" placeholder="104"></div>
-                    <div><label class="field-label">Proteína (g)</label><input type="number" id="bio-protein" class="input-pro" placeholder="160"></div>
-                    <div><label class="field-label">Carbos Keto</label><input type="number" id="bio-carbs" class="input-pro" placeholder="20"></div>
-                </div>
-                <div class="supp-grid mt-8" id="supp-checklist">
-                    <label class="check-pill"><input type="checkbox" value="Whey"> Proteína Whey</label>
-                    <label class="check-pill"><input type="checkbox" value="Creatina"> Creatina</label>
-                    <label class="check-pill"><input type="checkbox" value="Omega3"> Omega-3</label>
-                    <label class="check-pill"><input type="checkbox" value="D3K2"> Vitamina D3+K2</label>
-                    <label class="check-pill"><input type="checkbox" value="Kefir"> Kéfir</label>
-                    <label class="check-pill"><input type="checkbox" value="Electrolitos"> Electrolitos</label>
-                </div>
                 <button class="btn btn-primary btn-block mt-10" onclick="App.saveBiometricsToday()">💾 GUARDAR Y ACTUALIZAR CONSTANTES</button>
                 <div id="biometrics-history-list" class="mt-10"></div>
             </div>
         </section>
 
-        <!-- VISTA 5: SENSORES BLE CON AUTO-RECONEXIÓN + OTRAS APPS + INFORMES + DONACIONES -->
+        <!-- VISTA 5: SENSORES, OTRAS APPS E INFORMES -->
         <section id="view-sensors" class="view">
-            <!-- 1. CONEXIÓN BLUETOOTH CON AUTO-RECONEXIÓN ANTI-CORTES -->
             <div class="card">
                 <div class="card-header">
                     <span>📡 BANDA PECTORAL Y RELOJES BLE (AUTO-RECONEXIÓN)</span>
-                    <span class="badge badge-blue" id="sensor-count-badge">WATCHDOG ON</span>
+                    <span class="badge badge-blue">WATCHDOG ON</span>
                 </div>
-                <p class="sub-text">Conecta tu banda pectoral o reloj Amazfit. Si hay un microcorte de señal durante el ejercicio, el sistema se reconecta automáticamente sin perder tus pulsaciones.</p>
-
                 <div class="grid-2 mt-8">
                     <select id="device-type-select" class="select-light-dropdown">
-                        <option value="HR_BAND">💓 Banda Pectoral FC (Polar / Garmin / CooSpo)</option>
-                        <option value="SMARTWATCH">⌚ Smartwatch / Reloj (Amazfit T-Rex 3 Pro)</option>
-                        <option value="WRISTBAND">📿 Pulsera de Actividad (Xiaomi Band)</option>
-                        <option value="SCALE">⚖️ Báscula Inteligente Bluetooth</option>
+                        <option value="HR_BAND">💓 Banda Pectoral FC</option>
+                        <option value="SMARTWATCH">⌚ Smartwatch / Reloj (Amazfit)</option>
+                        <option value="WRISTBAND">📿 Pulsera de Actividad</option>
+                        <option value="SCALE">⚖️ Báscula Bluetooth</option>
                     </select>
                     <input type="text" id="custom-device-name" class="input-pro" placeholder="Alias (ej. Mi Banda FC)">
                 </div>
-
                 <div class="btn-group mt-8">
-                    <button class="btn btn-primary" onclick="App.connectRealBluetoothSensor()">🔍 ESCANEAR Y VINCULAR BANDA / RELOJ</button>
-                    <button class="btn btn-secondary" onclick="App.forceReconnectBle()">🔄 RECONECTAR AHORA</button>
+                    <button class="btn btn-primary" onclick="App.connectRealBluetoothSensor()">🔍 ESCANEAR Y VINCULAR</button>
+                    <button class="btn btn-secondary" onclick="App.forceReconnectBle()">🔄 RECONECTAR</button>
                 </div>
-
                 <div id="ble-devices-log" class="status-banner mt-8">Estado: Esperando conexión Bluetooth BLE...</div>
                 <div id="saved-devices-list" class="mt-8"></div>
             </div>
 
-            <!-- 2. RECOGER DATOS DE OTRAS APPS DE EJERCICIO Y SALUD -->
             <div class="card">
-                <div class="card-header">
-                    <span>🔄 RECOGER DATOS DE OTRAS APPS (ZEPP, STRAVA, MI FITNESS)</span>
-                </div>
+                <div class="card-header"><span>🔄 RECOGER DATOS DE OTRAS APPS (ZEPP, STRAVA, MI FITNESS)</span></div>
                 <div class="grid-2 mt-6">
-                    <button class="btn btn-primary" onclick="App.syncAllPhoneHealthApps()">📱 LEER PUENTE SALUD ANDROID</button>
+                    <button class="btn btn-primary" onclick="App.syncAllPhoneHealthApps()">📱 LEER PUENTE SALUD</button>
                     <label class="btn btn-success" style="cursor:pointer; display:flex; align-items:center; justify-content:center;">
-                        📂 SUBIR .GPX / .FIT / .TCX / .CSV
+                        📂 SUBIR .GPX / .FIT / .CSV
                         <input type="file" id="file-import-external" accept=".gpx,.tcx,.fit,.csv,.json" hidden onchange="App.importExternalActivity(event)">
                     </label>
-                </div>
-                <div class="grid-3 mt-8">
-                    <input type="number" id="ext-steps-input" class="input-pro" placeholder="Pasos App">
-                    <input type="number" id="ext-kcal-input" class="input-pro" placeholder="Kcal App">
-                    <button class="btn btn-secondary" onclick="App.saveManualExternalAppSync()">📥 GUARDAR</button>
                 </div>
                 <div id="external-imports-summary" class="status-banner mt-8">Listo para importar datos externos.</div>
                 <div id="external-history-list" class="mt-8"></div>
             </div>
 
-            <!-- 3. INFORMES PROFESIONALES, HISTORIAL DE SESIONES Y DONACIONES -->
             <div class="card">
-                <div class="card-header"><span>📄 INFORMES, HISTORIAL DE SESIONES Y BACKUP</span></div>
+                <div class="card-header"><span>📄 HISTORIAL DE ENTRENAMIENTOS E INFORMES PDF</span></div>
                 <div id="sessions-history-list" class="mb-8"></div>
                 <div class="btn-stack mt-6">
-                    <button class="btn btn-success" onclick="App.generateVectorPDF()">📄 DESCARGAR INFORME CLÍNICO Y DEPORTIVO (PDF)</button>
-                    <button class="btn btn-primary" onclick="App.sendClinicalReportByEmail()">✉️ ENVIAR INFORME A MI CORREO</button>
-                    <button class="btn btn-warning" onclick="App.toggleDonateModal(true)">☕ APOYAR / DONAR A ESTA APLICACIÓN</button>
+                    <button class="btn btn-success" onclick="App.generateVectorPDF()">📄 DESCARGAR INFORME GENERAL COMPLETO (PDF)</button>
+                    <button class="btn btn-primary" onclick="App.sendClinicalReportByEmail()">✉️ ENVIAR INFORME GENERAL A MI CORREO</button>
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="FitDB.exportMasterBackup()">📤 EXPORTAR BACKUP (.JSON)</button>
                         <label class="btn btn-secondary" style="cursor:pointer;">
@@ -604,19 +630,15 @@
             async delete(store, key) {
                 return new Promise((res) => { const tx = this.db.transaction(store, 'readwrite'); tx.objectStore(store).delete(key); tx.oncomplete = () => res(true); });
             },
-            async clearTiles() {
-                return new Promise((res) => { const tx = this.db.transaction('map_tiles', 'readwrite'); tx.objectStore('map_tiles').clear(); tx.oncomplete = () => res(true); });
-            },
             async seedDefaults() {
                 const devs = await this.getAll('dispositivos');
                 if (devs.length === 0) {
                     await this.put('dispositivos', { id: 'DEV_BANDA', nombre: 'Banda Pectoral FC', tipo: 'HR_BAND', protocolo: 'BLE 0x180D Auto-Reconnect' });
-                    await this.put('dispositivos', { id: 'DEV_TREX3', nombre: 'Amazfit T-Rex 3 Pro', tipo: 'SMARTWATCH', protocolo: 'BLE 0x180D Auto-Reconnect' });
                 }
             },
             async exportMasterBackup() {
                 const backup = {
-                    app: 'JEMS_PRO_v4',
+                    app: 'JEMS_PRO_v5',
                     timestamp: new Date().toISOString(),
                     localStorageState: { ...localStorage },
                     stores: {
@@ -630,7 +652,7 @@
                 };
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }));
-                a.download = `BACKUP_JEMS_v4_${new Date().toISOString().slice(0,10)}.json`;
+                a.download = `BACKUP_JEMS_v5_${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
             },
             async restoreMasterBackup(jsonText) {
@@ -651,22 +673,33 @@
         const App = {
             profile: { name: 'Juan Enrique Martínez', email: '', age: 49, height: 187, targetWeight: 108 },
             donation: { paypal: 'https://paypal.me/', kofi: 'https://ko-fi.com/', bizum: 'Consultar al creador' },
-            timer: { mode: 'CACO 3:1', workSec: 180, restSec: 60, totalRounds: 8, currentRound: 1, isWorkPhase: true, remainingSec: 180, running: false, intervalId: null, kcal: 0, hrSamples: [], customQueue: [], queueIndex: 0 },
-            ble: {
-                device: null,
-                hrChar: null,
-                currentBpm: 0,
-                maxHr: 171,
-                wantConnected: false,
-                reconnectTimer: null
+            timer: {
+                mode: 'CACO',
+                freeCountUp: false,
+                workSec: 180,
+                restSec: 60,
+                totalRounds: 8,
+                currentRound: 1,
+                isWorkPhase: true,
+                remainingSec: 180,
+                elapsedTotalSec: 0,
+                running: false,
+                intervalId: null,
+                kcal: 0,
+                hrSamples: [],
+                customQueue: [],
+                queueIndex: 0
             },
-            bgShield: { wakeLock: null, audioCtx: null, silentOsc: null },
+            lastCompletedSession: null,
+            ble: { device: null, currentBpm: 0, maxHr: 171, wantConnected: false, reconnectTimer: null },
+            bgShield: { wakeLock: null, audioInitialized: false },
             tts: { enabled: true },
             gps: {
                 enabled: false,
                 autoFollow: true,
                 isFullscreen: false,
                 watchId: null,
+                pollInterval: null,
                 map: null,
                 baseLayer: null,
                 overlayLayer: null,
@@ -707,153 +740,134 @@
                 this.updateTimerDisplay();
                 setTimeout(() => this.initGpsModule(), 250);
 
-                // Re-adquirir WakeLock y reconectar BLE cuando la pantalla vuelve a estar activa
+                // Al encender o apagar pantalla, forzar lectura GPS y mantener vivo el reproductor
                 document.addEventListener('visibilitychange', () => {
-                    if (!document.hidden) {
-                        if (this.timer.running || this.gps.enabled) this.engageKeepAlive();
-                        if (this.ble.wantConnected && (!this.ble.device || !this.ble.device.gatt.connected)) {
-                            this.forceReconnectBle();
+                    if (this.timer.running || this.gps.enabled) {
+                        this.engageNativeMediaKeepAlive();
+                        if (this.gps.enabled && navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(p => this.processGpsCoords(p), null, { enableHighAccuracy: true });
                         }
+                    }
+                    if (!document.hidden && this.ble.wantConnected && (!this.ble.device || !this.ble.device.gatt.connected)) {
+                        this.forceReconnectBle();
                     }
                 });
             },
 
-            // --- ESCUDO KEEP-ALIVE Y MODO BOLSILLO ---
-            async engageKeepAlive() {
+            // =====================================================================
+            // GENERADOR DE FLUJO WAV CONTINUO + MEDIA SESSION DE PANTALLA DE BLOQUEO
+            // (Impide que Android mate el navegador al pulsar el botón de apagar pantalla)
+            // =====================================================================
+            engageNativeMediaKeepAlive() {
                 try {
                     if ('wakeLock' in navigator && !this.bgShield.wakeLock) {
-                        this.bgShield.wakeLock = await navigator.wakeLock.request('screen').catch(() => null);
+                        navigator.wakeLock.request('screen').then(w => { this.bgShield.wakeLock = w; }).catch(() => {});
                     }
-                    if (!this.bgShield.audioCtx) {
-                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                        this.bgShield.audioCtx = new AudioCtx();
+                    const audioEl = document.getElementById('bg-keepalive-audio');
+                    if (audioEl && !this.bgShield.audioInitialized) {
+                        // Generar en memoria un archivo WAV real de 1 segundo con sonido casi cero
+                        const sampleRate = 8000;
+                        const numSamples = sampleRate;
+                        const buffer = new ArrayBuffer(44 + numSamples * 2);
+                        const view = new DataView(buffer);
+                        const writeStr = (off, s) => { for (let i = 0; i < s.length; i++) view.setUint8(off + i, s.charCodeAt(i)); };
+                        writeStr(0, 'RIFF');
+                        view.setUint32(4, 36 + numSamples * 2, true);
+                        writeStr(8, 'WAVEfmt ');
+                        view.setUint32(16, 16, true);
+                        view.setUint16(20, 1, true);
+                        view.setUint16(22, 1, true);
+                        view.setUint32(24, sampleRate, true);
+                        view.setUint32(28, sampleRate * 2, true);
+                        view.setUint16(32, 2, true);
+                        view.setUint16(34, 16, true);
+                        writeStr(36, 'data');
+                        view.setUint32(40, numSamples * 2, true);
+                        for (let i = 0; i < numSamples; i++) view.setInt16(44 + i * 2, 1, true);
+
+                        const blob = new Blob([buffer], { type: 'audio/wav' });
+                        audioEl.src = URL.createObjectURL(blob);
+                        this.bgShield.audioInitialized = true;
                     }
-                    if (this.bgShield.audioCtx.state === 'suspended') await this.bgShield.audioCtx.resume();
-                    if (!this.bgShield.silentOsc) {
-                        const osc = this.bgShield.audioCtx.createOscillator();
-                        const gain = this.bgShield.audioCtx.createGain();
-                        osc.frequency.value = 1;
-                        gain.gain.value = 0.0001;
-                        osc.connect(gain);
-                        gain.connect(this.bgShield.audioCtx.destination);
-                        osc.start();
-                        this.bgShield.silentOsc = osc;
+                    if (audioEl && audioEl.paused) {
+                        audioEl.play().catch(() => {});
+                    }
+                    if ('mediaSession' in navigator) {
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: `J.E.M.S. PRO: ${this.timer.mode}`,
+                            artist: `GPS: ${this.gps.distanceKm.toFixed(2)} km | FC: ${this.ble.currentBpm || '--'} BPM`,
+                            album: 'Telemetría Activa en Segundo Plano'
+                        });
+                        navigator.mediaSession.playbackState = 'playing';
                     }
                 } catch (_) {}
             },
 
             togglePocketLock(activate) {
-                const el = document.getElementById('pocket-lock-screen');
-                el.classList.toggle('hidden', !activate);
-                if (activate) {
-                    this.engageKeepAlive();
-                    this.speak('Modo bolsillo activado. El G P S y la banda seguirán grabando sin cortes.');
+                document.getElementById('pocket-lock-screen').classList.toggle('hidden', !activate);
+                if (activate) this.engageNativeMediaKeepAlive();
+            },
+
+            // =====================================================================
+            // CONFIGURADOR LIBRE DE TIEMPOS Y CRONÓMETRO
+            // =====================================================================
+            onQuickModeSelected(v) {
+                const presets = {
+                    CACO_3_1: { name: 'CACO', wMin: 3, wSec: 0, rSec: 60, rounds: 8, free: false, gps: false },
+                    HIKING_GPS: { name: 'SENDERISMO / MONTAÑA', wMin: 0, wSec: 0, rSec: 0, rounds: 1, free: true, gps: true },
+                    RUN_FREE: { name: 'CARRERA GPS', wMin: 0, wSec: 0, rSec: 0, rounds: 1, free: true, gps: true },
+                    WALK_ACTIVE: { name: 'CAMINATA GPS', wMin: 45, wSec: 0, rSec: 0, rounds: 1, free: false, gps: true },
+                    HYROX_8: { name: 'HYROX 8 EST.', wMin: 4, wSec: 0, rSec: 120, rounds: 8, free: false, gps: false },
+                    CROSSFIT_EMOM: { name: 'CROSSFIT WOD', wMin: 1, wSec: 0, rSec: 0, rounds: 15, free: false, gps: false },
+                    TABATA: { name: 'TABATA HIIT', wMin: 0, wSec: 20, rSec: 10, rounds: 8, free: false, gps: false }
+                };
+                const p = presets[v] || presets.CACO_3_1;
+                document.getElementById('cfg-work-min').value = p.wMin;
+                document.getElementById('cfg-work-sec').value = p.wSec;
+                document.getElementById('cfg-rest-sec').value = p.rSec;
+                document.getElementById('cfg-rounds').value = p.rounds;
+                document.getElementById('cfg-free-countup').checked = p.free;
+
+                this.timer.mode = p.name;
+                document.getElementById('active-mode-badge').textContent = p.name;
+                this.applyCustomTimerSettings();
+
+                if (p.gps && !this.gps.enabled) {
+                    if (v === 'HIKING_GPS') this.setMapLayer('TRAILS');
+                    this.toggleGpsTracking();
                 }
             },
 
-            // --- PERFIL Y DONACIONES ---
-            loadUserProfile() {
-                const s = localStorage.getItem('jems_user_profile');
-                if (s) { try { this.profile = { ...this.profile, ...JSON.parse(s) }; } catch(_){} }
-                else { document.getElementById('modal-onboarding').classList.remove('hidden'); }
-                this.ble.maxHr = Math.max(150, 220 - (parseInt(this.profile.age, 10) || 49));
-                document.getElementById('header-user-info').textContent = `${this.profile.name} · ${this.profile.email || 'Configurar email'}`;
-            },
-            openProfileModal() {
-                document.getElementById('prof-name').value = this.profile.name;
-                document.getElementById('prof-email').value = this.profile.email;
-                document.getElementById('modal-onboarding').classList.remove('hidden');
-            },
-            saveUserProfile() {
-                this.profile.name = document.getElementById('prof-name').value.trim() || 'Usuario J.E.M.S.';
-                this.profile.email = document.getElementById('prof-email').value.trim();
-                this.profile.age = parseInt(document.getElementById('prof-age').value || '49', 10);
-                this.profile.height = parseInt(document.getElementById('prof-height').value || '187', 10);
-                this.profile.targetWeight = parseFloat(document.getElementById('prof-target-weight').value || '108');
-                localStorage.setItem('jems_user_profile', JSON.stringify(this.profile));
-                document.getElementById('modal-onboarding').classList.add('hidden');
-                this.loadUserProfile();
-                this.renderBiometrics();
-            },
-
-            toggleDonateModal(show) {
-                document.getElementById('modal-donate').classList.toggle('hidden', !show);
-            },
-            loadDonationConfig() {
-                const saved = localStorage.getItem('jems_donation_cfg');
-                if (saved) { try { this.donation = { ...this.donation, ...JSON.parse(saved) }; } catch(_){} }
-                document.getElementById('donate-link-paypal').href = this.donation.paypal || 'https://paypal.me/';
-                document.getElementById('donate-link-kofi').href = this.donation.kofi || 'https://ko-fi.com/';
-                document.getElementById('donate-bizum-display').textContent = this.donation.bizum || 'Gracias por apoyar el proyecto J.E.M.S.';
-                document.getElementById('cfg-paypal').value = this.donation.paypal || '';
-                document.getElementById('cfg-kofi').value = this.donation.kofi || '';
-                document.getElementById('cfg-bizum').value = this.donation.bizum || '';
-            },
-            saveDonationConfig() {
-                this.donation = {
-                    paypal: document.getElementById('cfg-paypal').value.trim() || 'https://paypal.me/',
-                    kofi: document.getElementById('cfg-kofi').value.trim() || 'https://ko-fi.com/',
-                    bizum: document.getElementById('cfg-bizum').value.trim() || 'Gracias por tu apoyo'
-                };
-                localStorage.setItem('jems_donation_cfg', JSON.stringify(this.donation));
-                this.loadDonationConfig();
-                this.speak('Enlaces de donación actualizados.');
-            },
-
-            switchView(id) {
-                document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.target === id));
-                document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
-                if (id === 'view-dashboard' && this.gps.map) setTimeout(() => this.gps.map.invalidateSize(), 150);
-            },
-
-            speak(t) {
-                if (!this.tts.enabled || !('speechSynthesis' in window)) return;
-                window.speechSynthesis.cancel();
-                const u = new SpeechSynthesisUtterance(t); u.lang = 'es-ES'; window.speechSynthesis.speak(u);
-            },
-            toggleVoice() {
-                this.tts.enabled = !this.tts.enabled;
-                document.getElementById('btn-toggle-voice').textContent = this.tts.enabled ? '🔊 VOZ: ON' : '🔇 VOZ: OFF';
-            },
-
-            // --- CRONÓMETRO Y COLA DE ESTACIONES ---
-            onQuickModeSelected(v) {
-                const map = {
-                    CACO_3_1: ['CACO 3:1', 180, 60, 8, false],
-                    CACO_2_2: ['CACO 2:2', 120, 120, 10, false],
-                    HIKING_GPS: ['SENDERISMO / MONTAÑA', 7200, 0, 1, true],
-                    RUN_FREE: ['CARRERA CALLE GPS', 3600, 0, 1, true],
-                    WALK_ACTIVE: ['CAMINATA ACTIVA GPS', 3600, 0, 1, true],
-                    HYROX_8: ['HYROX 8 EST.', 240, 120, 8, false],
-                    CROSSFIT_EMOM: ['CROSSFIT EMOM', 60, 0, 15, false],
-                    CROSSFIT_AMRAP: ['CROSSFIT AMRAP', 720, 0, 1, false],
-                    TABATA: ['TABATA HIIT', 20, 10, 8, false]
-                };
-                const p = map[v] || map.CACO_3_1;
+            applyCustomTimerSettings() {
                 this.pauseWorkoutTimer();
                 this.timer.customQueue = [];
-                this.timer.queueIndex = 0;
-                this.timer.mode = p[0];
-                this.timer.workSec = p[1];
-                this.timer.restSec = p[2];
-                this.timer.totalRounds = p[3];
-                this.timer.currentRound = 1;
-                this.timer.remainingSec = p[1];
-                this.timer.isWorkPhase = true;
-                document.getElementById('active-mode-badge').textContent = p[0];
-                document.getElementById('active-station-detail').textContent = `Modalidad: ${p[0]}`;
-                this.updateTimerDisplay();
+                const free = document.getElementById('cfg-free-countup').checked;
+                const wMin = parseInt(document.getElementById('cfg-work-min').value || '0', 10);
+                const wSec = parseInt(document.getElementById('cfg-work-sec').value || '0', 10);
+                const rSec = parseInt(document.getElementById('cfg-rest-sec').value || '0', 10);
+                const rounds = Math.max(1, parseInt(document.getElementById('cfg-rounds').value || '1', 10));
 
-                if (p[4]) {
-                    if (v === 'HIKING_GPS') this.setMapLayer('TRAILS');
-                    if (!this.gps.enabled) this.toggleGpsTracking();
-                }
+                document.getElementById('timer-inputs-row').style.opacity = free ? '0.4' : '1';
+                this.timer.freeCountUp = free;
+                this.timer.workSec = Math.max(5, wMin * 60 + wSec);
+                this.timer.restSec = Math.max(0, rSec);
+                this.timer.totalRounds = rounds;
+                this.timer.currentRound = 1;
+                this.timer.isWorkPhase = true;
+                this.timer.elapsedTotalSec = 0;
+                this.timer.remainingSec = free ? 0 : this.timer.workSec;
+
+                document.getElementById('timer-direction-label').textContent = free ? 'CRONÓMETRO LIBRE (HACIA ARRIBA)' : 'TIEMPO DE FASE / CUENTA ATRÁS';
+                document.getElementById('active-station-detail').textContent = free
+                    ? `Modo Libre sin límite de tiempo (${this.timer.mode})`
+                    : `Configurado: ${wMin}m ${wSec}s trabajo / ${rSec}s descanso x ${rounds} rondas`;
+                this.updateTimerDisplay();
             },
 
             startWorkoutTimer() {
                 if (this.timer.running) return;
                 this.timer.running = true;
-                this.engageKeepAlive();
+                this.engageNativeMediaKeepAlive();
                 this.speak(`Iniciando ${this.timer.mode}`);
                 let last = Date.now();
 
@@ -862,7 +876,8 @@
                     const diff = Math.floor((now - last) / 1000);
                     if (diff < 1) return;
                     last += diff * 1000;
-                    this.timer.remainingSec -= diff;
+
+                    this.timer.elapsedTotalSec += diff;
 
                     if (this.ble.currentBpm > 0) this.timer.hrSamples.push(this.ble.currentBpm);
                     const hrForKcal = this.ble.currentBpm > 0 ? this.ble.currentBpm : 118;
@@ -870,70 +885,170 @@
                     const kcalPerMin = Math.max(4, ((-55.0969 + (0.6309 * hrForKcal) + (0.1988 * weight) + (0.2017 * (this.profile.age || 49))) / 4.184));
                     this.timer.kcal += (kcalPerMin / 60) * diff;
 
-                    if (this.timer.remainingSec === 3) this.speak('Tres, dos, uno');
+                    if (this.timer.freeCountUp) {
+                        this.timer.remainingSec = this.timer.elapsedTotalSec;
+                    } else {
+                        this.timer.remainingSec -= diff;
+                        if (this.timer.remainingSec === 3) this.speak('Tres, dos, uno');
 
-                    if (this.timer.remainingSec <= 0) {
-                        if (this.timer.customQueue.length > 0) {
-                            this.timer.queueIndex++;
-                            if (this.timer.queueIndex >= this.timer.customQueue.length) {
-                                this.finishAndSaveWorkout();
-                                return;
+                        if (this.timer.remainingSec <= 0) {
+                            if (this.timer.customQueue.length > 0) {
+                                this.timer.queueIndex++;
+                                if (this.timer.queueIndex >= this.timer.customQueue.length) {
+                                    this.finishAndSaveWorkout();
+                                    return;
+                                }
+                                const nextSt = this.timer.customQueue[this.timer.queueIndex];
+                                this.timer.currentRound = this.timer.queueIndex + 1;
+                                this.timer.remainingSec = nextSt.duration;
+                                document.getElementById('active-station-detail').textContent = nextSt.detail;
+                                this.speak(`Siguiente estación: ${nextSt.title}`);
+                            } else if (this.timer.isWorkPhase && this.timer.restSec > 0) {
+                                this.timer.isWorkPhase = false;
+                                this.timer.remainingSec = this.timer.restSec;
+                                this.speak(this.timer.mode.includes('CACO') ? 'Cambio a correr.' : 'Descanso.');
+                            } else {
+                                this.timer.currentRound++;
+                                if (this.timer.currentRound > this.timer.totalRounds) {
+                                    this.finishAndSaveWorkout();
+                                    return;
+                                }
+                                this.timer.isWorkPhase = true;
+                                this.timer.remainingSec = this.timer.workSec;
+                                this.speak(this.timer.mode.includes('CACO') ? 'Fase caminar.' : `Ronda ${this.timer.currentRound}`);
                             }
-                            const nextSt = this.timer.customQueue[this.timer.queueIndex];
-                            this.timer.currentRound = this.timer.queueIndex + 1;
-                            this.timer.remainingSec = nextSt.duration;
-                            document.getElementById('active-station-detail').textContent = nextSt.detail;
-                            this.speak(`Siguiente estación: ${nextSt.title}`);
-                        } else if (this.timer.isWorkPhase && this.timer.restSec > 0) {
-                            this.timer.isWorkPhase = false;
-                            this.timer.remainingSec = this.timer.restSec;
-                            this.speak(this.timer.mode.includes('CACO') ? 'Cambio a correr.' : 'Descanso.');
-                        } else {
-                            this.timer.currentRound++;
-                            if (this.timer.currentRound > this.timer.totalRounds) {
-                                this.finishAndSaveWorkout();
-                                return;
-                            }
-                            this.timer.isWorkPhase = true;
-                            this.timer.remainingSec = this.timer.workSec;
-                            this.speak(this.timer.mode.includes('CACO') ? 'Fase caminar.' : `Ronda ${this.timer.currentRound}`);
                         }
                     }
                     this.updateTimerDisplay();
                 }, 500);
             },
 
-            pauseWorkoutTimer() { this.timer.running = false; clearInterval(this.timer.intervalId); },
+            pauseWorkoutTimer() {
+                this.timer.running = false;
+                clearInterval(this.timer.intervalId);
+            },
 
+            // =====================================================================
+            // FINALIZAR ENTRENAMIENTO + ABRIR PANTALLA DE INFORME POST-SESIÓN
+            // =====================================================================
             async finishAndSaveWorkout() {
                 this.pauseWorkoutTimer();
                 const avgHr = this.timer.hrSamples.length
                     ? Math.round(this.timer.hrSamples.reduce((a, b) => a + b, 0) / this.timer.hrSamples.length)
-                    : (this.ble.currentBpm || 0);
+                    : (this.ble.currentBpm || 120);
                 const maxHr = this.timer.hrSamples.length ? Math.max(...this.timer.hrSamples) : avgHr;
 
-                await FitDB.put('sesiones', {
+                const durSec = Math.max(1, this.timer.elapsedTotalSec);
+                const durMin = String(Math.floor(durSec / 60)).padStart(2, '0');
+                const durRem = String(durSec % 60).padStart(2, '0');
+
+                const sessionRecord = {
                     id: 'SES_' + Date.now(),
                     fecha: new Date().toISOString(),
                     modo: this.timer.mode,
+                    duracionTexto: `${durMin}:${durRem}`,
+                    duracionSeg: durSec,
                     kcal: Math.round(this.timer.kcal),
                     avgHr,
                     maxHr,
                     distanciaKm: Number(this.gps.distanceKm.toFixed(2)),
                     desnivelPositivoM: Math.round(this.gps.elevGain),
-                    desnivelNegativoM: Math.round(this.gps.elevLoss)
-                });
+                    desnivelNegativoM: Math.round(this.gps.elevLoss),
+                    trimp: this.gps.trimpScore || Math.round((durSec / 60) * 1.8)
+                };
+
+                this.lastCompletedSession = sessionRecord;
+                await FitDB.put('sesiones', sessionRecord);
                 await this.renderSessionsHistory();
-                this.speak('Entrenamiento guardado correctamente.');
+
+                this.openLastWorkoutSummary();
+                this.speak('Entrenamiento finalizado. Informe de sesión listo en pantalla.');
+            },
+
+            async openLastWorkoutSummary() {
+                if (!this.lastCompletedSession) {
+                    const all = await FitDB.getAll('sesiones');
+                    if (all.length > 0) this.lastCompletedSession = all[all.length - 1];
+                }
+                const s = this.lastCompletedSession || {
+                    modo: this.timer.mode,
+                    fecha: new Date().toISOString(),
+                    duracionTexto: document.getElementById('main-workout-timer').textContent,
+                    distanciaKm: Number(this.gps.distanceKm.toFixed(2)),
+                    desnivelPositivoM: Math.round(this.gps.elevGain),
+                    desnivelNegativoM: Math.round(this.gps.elevLoss),
+                    kcal: Math.round(this.timer.kcal),
+                    avgHr: this.ble.currentBpm || '--',
+                    maxHr: this.ble.currentBpm || '--',
+                    trimp: this.gps.trimpScore || 0
+                };
+
+                document.getElementById('pw-title').textContent = `Informe: ${s.modo}`;
+                document.getElementById('pw-date').textContent = new Date(s.fecha).toLocaleString();
+                document.getElementById('pw-duration').textContent = s.duracionTexto || '00:00';
+                document.getElementById('pw-distance').textContent = `${s.distanciaKm || 0} km`;
+                document.getElementById('pw-elevation').textContent = `+${s.desnivelPositivoM || 0}m / -${s.desnivelNegativoM || 0}m`;
+                document.getElementById('pw-kcal').textContent = `${s.kcal || 0} kcal`;
+                document.getElementById('pw-hr').textContent = `${s.avgHr} / ${s.maxHr} BPM`;
+                document.getElementById('pw-trimp').textContent = `${s.trimp || 0} pts`;
+
+                document.getElementById('modal-post-workout').classList.remove('hidden');
+            },
+
+            closePostWorkoutModal() {
+                document.getElementById('modal-post-workout').classList.add('hidden');
+            },
+
+            generateLastWorkoutPDF() {
+                if (!window.jspdf) return;
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const s = this.lastCompletedSession || {};
+
+                doc.setFontSize(15);
+                doc.text(`INFORME DE ENTRENAMIENTO J.E.M.S. PRO - ${s.modo || this.timer.mode}`, 14, 18);
+                doc.setFontSize(10);
+                doc.text(`Atleta: ${this.profile.name} | Fecha: ${new Date(s.fecha || Date.now()).toLocaleString()}`, 14, 27);
+                doc.line(14, 31, 196, 31);
+
+                doc.setFontSize(12);
+                doc.text('METRICAS DE LA SESION COMPLETADA:', 14, 40);
+                doc.setFontSize(10);
+                doc.text(`- Duracion Total: ${s.duracionTexto || '00:00'}`, 14, 48);
+                doc.text(`- Distancia Recorrida (GPS): ${s.distanciaKm || 0} km`, 14, 55);
+                doc.text(`- Desnivel Acumulado: +${s.desnivelPositivoM || 0} m / -${s.desnivelNegativoM || 0} m`, 14, 62);
+                doc.text(`- Gasto Calorico Estimado: ${s.kcal || 0} kcal`, 14, 69);
+                doc.text(`- Frecuencia Cardiaca Media / Maxima: ${s.avgHr || '--'} / ${s.maxHr || '--'} BPM`, 14, 76);
+                doc.text(`- Carga de Esfuerzo (TRIMP): ${s.trimp || 0} pts`, 14, 83);
+
+                doc.save(`SESION_JEMS_${new Date().toISOString().slice(0,10)}.pdf`);
+            },
+
+            sendLastWorkoutByEmail() {
+                if (!this.profile.email) { this.openProfileModal(); return; }
+                const s = this.lastCompletedSession || {};
+                const sub = encodeURIComponent(`Informe de Entrenamiento J.E.M.S. (${s.modo || this.timer.mode})`);
+                const body = encodeURIComponent(
+                    `RESUMEN DE ENTRENAMIENTO - ${this.profile.name}\n` +
+                    `Modalidad: ${s.modo || this.timer.mode}\n` +
+                    `Duración: ${s.duracionTexto || '00:00'}\n` +
+                    `Distancia GPS: ${s.distanciaKm || 0} km (+${s.desnivelPositivoM || 0}m / -${s.desnivelNegativoM || 0}m)\n` +
+                    `Calorías: ${s.kcal || 0} kcal\n` +
+                    `Frecuencia Cardíaca Media/Máx: ${s.avgHr || '--'} / ${s.maxHr || '--'} BPM\n`
+                );
+                window.location.href = `mailto:${this.profile.email}?subject=${sub}&body=${body}`;
             },
 
             updateTimerDisplay() {
-                const m = String(Math.floor(Math.max(0, this.timer.remainingSec) / 60)).padStart(2, '0');
-                const s = String(Math.max(0, this.timer.remainingSec) % 60).padStart(2, '0');
-                const timeStr = `${m}:${s}`;
+                const secVal = Math.max(0, this.timer.remainingSec);
+                const h = Math.floor(secVal / 3600);
+                const m = String(Math.floor((secVal % 3600) / 60)).padStart(2, '0');
+                const s = String(secVal % 60).padStart(2, '0');
+                const timeStr = h > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;
+
                 document.getElementById('main-workout-timer').textContent = timeStr;
                 document.getElementById('pocket-live-timer').textContent = timeStr;
-                document.getElementById('timer-round-info').textContent = `${this.timer.currentRound} / ${this.timer.totalRounds}`;
+                document.getElementById('timer-round-info').textContent = this.timer.freeCountUp ? 'LIBRE' : `${this.timer.currentRound} / ${this.timer.totalRounds}`;
                 document.getElementById('timer-kcal').textContent = `${Math.round(this.timer.kcal)} kcal`;
                 if (this.timer.hrSamples.length > 0) {
                     const avg = Math.round(this.timer.hrSamples.reduce((a, b) => a + b, 0) / this.timer.hrSamples.length);
@@ -943,15 +1058,14 @@
             },
 
             // =====================================================================
-            // BLUETOOTH BLE CON WATCHDOG DE AUTO-RECONEXIÓN (EVITA CAÍDAS DE BANDA)
+            // BLUETOOTH BLE CON RECONEXIÓN AUTOMÁTICA
             // =====================================================================
             async connectRealBluetoothSensor() {
                 const logEl = document.getElementById('ble-devices-log');
                 if (!navigator.bluetooth) {
-                    logEl.textContent = '⚠️ Asegúrate de abrir el enlace https:// en Chrome y tener el Bluetooth encendido.';
+                    logEl.textContent = '⚠️ Abre el enlace https:// en Chrome y activa el Bluetooth.';
                     return;
                 }
-
                 try {
                     logEl.textContent = '🔍 Buscando banda pectoral o reloj Bluetooth...';
                     let device;
@@ -966,35 +1080,22 @@
                             optionalServices: ['heart_rate', 0x180D, 'battery_service', 0x181D, 0x181B]
                         });
                     }
-
                     this.ble.device = device;
                     this.ble.wantConnected = true;
-                    this.engageKeepAlive();
-
-                    device.addEventListener('gattserverdisconnected', () => {
-                        this.onBleDisconnected();
-                    });
-
+                    this.engageNativeMediaKeepAlive();
+                    device.addEventListener('gattserverdisconnected', () => this.onBleDisconnected());
                     await this.establishGattStream();
 
                     const devName = device.name || 'Banda FC';
-                    await FitDB.put('dispositivos', {
-                        id: 'DEV_' + devName.replace(/\s+/g, '_'),
-                        nombre: devName,
-                        tipo: document.getElementById('device-type-select').value,
-                        protocolo: 'BLE 0x180D Auto-Reconnect'
-                    });
+                    await FitDB.put('dispositivos', { id: 'DEV_' + devName.replace(/\s+/g, '_'), nombre: devName, tipo: 'HR_BAND', protocolo: 'BLE 0x180D' });
                     await this.renderSavedDevices();
                 } catch (err) {
-                    logEl.textContent = `❌ Cancelado o no encontrado: ${err.message}`;
+                    logEl.textContent = `❌ Cancelado: ${err.message}`;
                 }
             },
 
             async establishGattStream() {
                 if (!this.ble.device) return;
-                const logEl = document.getElementById('ble-devices-log');
-                const devName = this.ble.device.name || 'Sensor FC';
-
                 const server = await this.ble.device.gatt.connect();
                 const service = await server.getPrimaryService('heart_rate');
                 const char = await service.getCharacteristic('heart_rate_measurement');
@@ -1007,41 +1108,24 @@
                     this.onRealHeartRateReceived(realBpm);
                 });
 
-                if (this.ble.reconnectTimer) {
-                    clearInterval(this.ble.reconnectTimer);
-                    this.ble.reconnectTimer = null;
-                }
-
-                const dot = document.getElementById('ble-status-dot');
-                dot.className = 'status-dot connected';
-                logEl.textContent = `✅ Conectado de forma continua a ${devName}. Auto-reconexión activa.`;
+                if (this.ble.reconnectTimer) { clearInterval(this.ble.reconnectTimer); this.ble.reconnectTimer = null; }
+                document.getElementById('ble-status-dot').className = 'status-dot connected';
+                document.getElementById('ble-devices-log').textContent = `✅ Conectado a ${this.ble.device.name || 'Banda FC'}.`;
             },
 
             onBleDisconnected() {
-                const logEl = document.getElementById('ble-devices-log');
-                const dot = document.getElementById('ble-status-dot');
-                dot.className = 'status-dot reconnecting';
-                logEl.textContent = '🔄 Microcorte detectado en la banda. Reconectando automáticamente...';
-
+                document.getElementById('ble-status-dot').className = 'status-dot reconnecting';
+                document.getElementById('ble-devices-log').textContent = '🔄 Reconectando banda pectoral automáticamente...';
                 if (!this.ble.wantConnected || !this.ble.device) return;
                 if (this.ble.reconnectTimer) clearInterval(this.ble.reconnectTimer);
-
-                // Bucle persistente que reconecta la banda automáticamente cada 2.5 segundos
                 this.ble.reconnectTimer = setInterval(async () => {
-                    if (!this.ble.device || this.ble.device.gatt.connected) {
-                        clearInterval(this.ble.reconnectTimer);
-                        return;
-                    }
-                    try {
-                        await this.establishGattStream();
-                    } catch (_) {}
+                    if (!this.ble.device || this.ble.device.gatt.connected) { clearInterval(this.ble.reconnectTimer); return; }
+                    try { await this.establishGattStream(); } catch (_) {}
                 }, 2500);
             },
 
             async forceReconnectBle() {
-                if (this.ble.device) {
-                    try { await this.establishGattStream(); return; } catch (_) {}
-                }
+                if (this.ble.device) { try { await this.establishGattStream(); return; } catch (_) {} }
                 await this.connectRealBluetoothSensor();
             },
 
@@ -1053,8 +1137,7 @@
                 document.getElementById('pocket-live-bpm').textContent = `${bpm}`;
 
                 const pct = Math.min(100, Math.max(0, Math.round((bpm / this.ble.maxHr) * 100)));
-                let zone = 'Z1 SUAVE';
-                let zClass = 'zone-1';
+                let zone = 'Z1 SUAVE'; let zClass = 'zone-1';
                 if (pct >= 90) { zone = 'Z5 MÁXIMO'; zClass = 'zone-5'; }
                 else if (pct >= 80) { zone = 'Z4 UMBRAL'; zClass = 'zone-4'; }
                 else if (pct >= 70) { zone = 'Z3 AERÓBICO'; zClass = 'zone-3'; }
@@ -1062,17 +1145,14 @@
 
                 document.getElementById('console-live-zone').textContent = `${zone} (${pct}%)`;
                 const bar = document.getElementById('hr-visual-fill');
-                if (bar) {
-                    bar.style.width = `${pct}%`;
-                    bar.className = `hr-zone-fill ${zClass}`;
-                }
+                if (bar) { bar.style.width = `${pct}%`; bar.className = `hr-zone-fill ${zClass}`; }
             },
 
             async renderSavedDevices() {
                 const devs = await FitDB.getAll('dispositivos');
                 document.getElementById('saved-devices-list').innerHTML = devs.map(d => `
                     <div class="metric-row">
-                        <span><strong>${d.nombre}</strong> <small class="sub-text">(${d.tipo})</small></span>
+                        <span><strong>${d.nombre}</strong></span>
                         <div class="btn-group">
                             <button class="btn btn-xs btn-primary" onclick="App.forceReconnectBle()">CONECTAR</button>
                             <button class="btn btn-xs btn-danger" onclick="FitDB.delete('dispositivos','${d.id}').then(()=>App.renderSavedDevices())">✕</button>
@@ -1082,25 +1162,16 @@
             },
 
             // =====================================================================
-            // MAPA GPS CON SENDEROS, CARRETERAS, SATÉLITE HÍBRIDO Y ZOOM PANORÁMICO
+            // GPS CON RE-MUESTREO ACTIVO + AUDIO KEEP-ALIVE
             // =====================================================================
             initGpsModule() {
                 if (!window.L || this.gps.map) return;
-                this.gps.map = L.map('tactical-map', {
-                    zoomControl: true,
-                    scrollWheelZoom: true,
-                    touchZoom: true,
-                    doubleClickZoom: true,
-                    boxZoom: true
-                }).setView([37.625, -0.725], 13);
-
-                // Si el usuario arrastra o hace zoom con los dedos para ver la panorámica, desactiva el bloqueo de cámara
+                this.gps.map = L.map('tactical-map', { zoomControl: true, touchZoom: true }).setView([37.625, -0.725], 13);
                 this.gps.map.on('dragstart', () => {
                     this.gps.autoFollow = false;
-                    document.getElementById('btn-follow-gps').textContent = '🎯 CENTRAR EN MÍ';
+                    document.getElementById('btn-follow-gps').textContent = '🎯 CENTRAR';
                     document.getElementById('btn-follow-gps').className = 'btn btn-xs btn-secondary';
                 });
-
                 this.setMapLayer('TRAILS');
                 this.gps.polyline = L.polyline([], { color: '#ef4444', weight: 5 }).addTo(this.gps.map);
                 this.drawElevationProfile();
@@ -1113,34 +1184,19 @@
                     const el = document.getElementById(id);
                     if (el) el.className = (k === type) ? 'btn btn-xs btn-primary' : 'btn btn-xs btn-secondary';
                 });
-
                 if (!this.gps.map || !window.L) return;
                 if (this.gps.baseLayer) this.gps.map.removeLayer(this.gps.baseLayer);
                 if (this.gps.overlayLayer) { this.gps.map.removeLayer(this.gps.overlayLayer); this.gps.overlayLayer = null; }
 
                 if (type === 'TRAILS') {
-                    // Capa Especializada en Senderos, Caminos de Tierra, Pistas Forestales y Carreteras (CyclOSM / OSM Outdoors)
-                    this.gps.baseLayer = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-                        maxZoom: 19, attribution: 'Senderos & Caminos'
-                    }).addTo(this.gps.map);
+                    this.gps.baseLayer = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this.gps.map);
                 } else if (type === 'TERRAIN') {
-                    // Mapa Topográfico con Curvas de Nivel
-                    this.gps.baseLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 17, attribution: 'Topo'
-                    }).addTo(this.gps.map);
+                    this.gps.baseLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17 }).addTo(this.gps.map);
                 } else if (type === 'SATELLITE') {
-                    // Satélite Real de Alta Resolución (Esri World Imagery) + Capa Híbrida de Caminos y Carreteras encima
-                    this.gps.baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                        maxZoom: 19, attribution: 'Satélite HD'
-                    }).addTo(this.gps.map);
-                    this.gps.overlayLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
-                        maxZoom: 19, opacity: 0.85
-                    }).addTo(this.gps.map);
+                    this.gps.baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }).addTo(this.gps.map);
+                    this.gps.overlayLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, opacity: 0.85 }).addTo(this.gps.map);
                 } else {
-                    // Carreteras y Callejero Estándar
-                    this.gps.baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19, attribution: 'OSM'
-                    }).addTo(this.gps.map);
+                    this.gps.baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this.gps.map);
                 }
             },
 
@@ -1155,10 +1211,8 @@
 
             toggleMapFullscreen() {
                 this.gps.isFullscreen = !this.gps.isFullscreen;
-                const mapBox = document.getElementById('tactical-map');
-                const exitBtn = document.getElementById('btn-exit-fullscreen-map');
-                mapBox.classList.toggle('fullscreen-map', this.gps.isFullscreen);
-                exitBtn.classList.toggle('hidden', !this.gps.isFullscreen);
+                document.getElementById('tactical-map').classList.toggle('fullscreen-map', this.gps.isFullscreen);
+                document.getElementById('btn-exit-fullscreen-map').classList.toggle('hidden', !this.gps.isFullscreen);
                 if (this.gps.map) setTimeout(() => this.gps.map.invalidateSize(), 200);
             },
 
@@ -1168,76 +1222,82 @@
                 const btn = document.getElementById('btn-toggle-gps');
 
                 if (this.gps.enabled && navigator.geolocation) {
-                    this.engageKeepAlive();
-                    badge.textContent = 'BUSCANDO SATÉLITES...';
+                    this.engageNativeMediaKeepAlive();
+                    badge.textContent = 'ACTIVO';
                     badge.className = 'badge badge-green';
                     btn.textContent = '⏹ DETENER GPS';
                     btn.className = 'btn btn-xs btn-danger';
 
-                    this.gps.watchId = navigator.geolocation.watchPosition(pos => {
-                        const { latitude, longitude, altitude, accuracy, speed } = pos.coords;
-                        badge.textContent = `GPS OK (±${Math.round(accuracy || 5)}m)`;
+                    this.gps.watchId = navigator.geolocation.watchPosition(
+                        pos => this.processGpsCoords(pos),
+                        null,
+                        { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 }
+                    );
 
-                        // Ignorar rebotes con precisión muy mala (>45m)
-                        if (accuracy && accuracy > 45) return;
-
-                        const alt = (altitude !== null && !isNaN(altitude)) ? Math.round(altitude) : (this.gps.currentAlt || 15);
-                        this.gps.currentAlt = alt;
-
-                        const latLng = [latitude, longitude];
-                        if (!this.gps.marker) {
-                            this.gps.marker = L.circleMarker(latLng, { radius: 8, color: '#fff', fillColor: '#16a34a', fillOpacity: 1 }).addTo(this.gps.map);
-                            this.gps.map.setView(latLng, 16);
-                        } else {
-                            this.gps.marker.setLatLng(latLng);
-                            if (this.gps.autoFollow) this.gps.map.panTo(latLng);
+                    // Sondeo de respaldo cada 4 segundos para forzar lectura mientras suena el audio de fondo
+                    if (this.gps.pollInterval) clearInterval(this.gps.pollInterval);
+                    this.gps.pollInterval = setInterval(() => {
+                        if (this.gps.enabled) {
+                            navigator.geolocation.getCurrentPosition(pos => this.processGpsCoords(pos), null, { enableHighAccuracy: true, maximumAge: 2000 });
                         }
-
-                        const now = Date.now();
-                        const last = this.gps.lastValidPoint;
-
-                        if (last) {
-                            const dKm = this.calcHaversineKm(last.lat, last.lon, latitude, longitude);
-                            const dtSec = Math.max(1, (now - last.timestamp) / 1000);
-                            const calcSpeedKmh = dKm / (dtSec / 3600);
-
-                            // FILTRO ANTI-LINEA RECTA / ANTI-TELETRANSPORTE:
-                            // Si el usuario apagó la pantalla física o hubo un salto irreal (>38 km/h andando/corriendo o >200m de golpe tras hueco),
-                            // actualizamos la referencia sin sumar esa línea recta falsa a la distancia.
-                            if (dtSec > 25 && dKm > 0.15) {
-                                this.gps.lastValidPoint = { lat: latitude, lon: longitude, alt, timestamp: now, hr: this.ble.currentBpm || 120 };
-                                return;
-                            }
-
-                            if (dKm >= 0.0025 && calcSpeedKmh < 40) {
-                                this.gps.distanceKm += dKm;
-                                this.gps.currentSpeedKmh = (speed !== null && speed >= 0) ? (speed * 3.6) : calcSpeedKmh;
-
-                                const altDiff = alt - last.alt;
-                                if (altDiff >= 1.5) this.gps.elevGain += altDiff;
-                                else if (altDiff <= -1.5) this.gps.elevLoss += Math.abs(altDiff);
-
-                                const pt = { lat: latitude, lon: longitude, alt, timestamp: now, hr: this.ble.currentBpm || 120 };
-                                this.gps.trackPoints.push(pt);
-                                this.gps.lastValidPoint = pt;
-                                this.gps.polyline.addLatLng(latLng);
-                            }
-                        } else {
-                            const pt = { lat: latitude, lon: longitude, alt, timestamp: now, hr: this.ble.currentBpm || 120 };
-                            this.gps.trackPoints.push(pt);
-                            this.gps.lastValidPoint = pt;
-                            this.gps.polyline.addLatLng(latLng);
-                        }
-                        this.updateGpsUI();
-                        this.drawElevationProfile();
-                    }, null, { enableHighAccuracy: true, maximumAge: 1000, timeout: 15000 });
+                    }, 4000);
                 } else {
                     badge.textContent = 'INACTIVO';
                     badge.className = 'badge';
                     btn.textContent = '▶ ACTIVAR GPS';
                     btn.className = 'btn btn-xs btn-success';
                     if (this.gps.watchId) navigator.geolocation.clearWatch(this.gps.watchId);
+                    if (this.gps.pollInterval) clearInterval(this.gps.pollInterval);
                 }
+            },
+
+            processGpsCoords(pos) {
+                const { latitude, longitude, altitude, accuracy, speed } = pos.coords;
+                document.getElementById('gps-status-badge').textContent = `GPS OK (±${Math.round(accuracy || 5)}m)`;
+                if (accuracy && accuracy > 65) return;
+
+                const alt = (altitude !== null && !isNaN(altitude)) ? Math.round(altitude) : (this.gps.currentAlt || 15);
+                this.gps.currentAlt = alt;
+
+                const latLng = [latitude, longitude];
+                if (!this.gps.marker) {
+                    this.gps.marker = L.circleMarker(latLng, { radius: 8, color: '#fff', fillColor: '#16a34a', fillOpacity: 1 }).addTo(this.gps.map);
+                    this.gps.map.setView(latLng, 16);
+                } else {
+                    this.gps.marker.setLatLng(latLng);
+                    if (this.gps.autoFollow && !document.hidden) this.gps.map.panTo(latLng);
+                }
+
+                const now = Date.now();
+                const last = this.gps.lastValidPoint;
+
+                if (last) {
+                    const dKm = this.calcHaversineKm(last.lat, last.lon, latitude, longitude);
+                    const dtSec = Math.max(0.5, (now - last.timestamp) / 1000);
+                    const calcSpeedKmh = dKm / (dtSec / 3600);
+
+                    // Acepta movimiento real (>2 metros y velocidad humana <36 km/h) sin cortar en segundo plano
+                    if (dKm >= 0.002 && calcSpeedKmh < 36) {
+                        this.gps.distanceKm += dKm;
+                        this.gps.currentSpeedKmh = (speed !== null && speed >= 0) ? (speed * 3.6) : calcSpeedKmh;
+
+                        const altDiff = alt - last.alt;
+                        if (altDiff >= 1.5) this.gps.elevGain += altDiff;
+                        else if (altDiff <= -1.5) this.gps.elevLoss += Math.abs(altDiff);
+
+                        const pt = { lat: latitude, lon: longitude, alt, timestamp: now, hr: this.ble.currentBpm || 120 };
+                        this.gps.trackPoints.push(pt);
+                        this.gps.lastValidPoint = pt;
+                        this.gps.polyline.addLatLng(latLng);
+                    }
+                } else {
+                    const pt = { lat: latitude, lon: longitude, alt, timestamp: now, hr: this.ble.currentBpm || 120 };
+                    this.gps.trackPoints.push(pt);
+                    this.gps.lastValidPoint = pt;
+                    this.gps.polyline.addLatLng(latLng);
+                }
+                this.updateGpsUI();
+                this.drawElevationProfile();
             },
 
             calcHaversineKm(lat1, lon1, lat2, lon2) {
@@ -1274,39 +1334,24 @@
                 const ctx = canvas.getContext('2d');
                 const w = canvas.width; const h = canvas.height;
                 ctx.clearRect(0, 0, w, h);
-
                 const pts = this.gps.trackPoints;
                 if (pts.length < 2) {
-                    ctx.fillStyle = '#94a3b8';
-                    ctx.font = '11px sans-serif';
-                    ctx.fillText('Perfil de Altitud (Verde) y Pulsaciones (Rojo) en vivo...', 14, h / 2 + 4);
+                    ctx.fillStyle = '#94a3b8'; ctx.font = '11px sans-serif';
+                    ctx.fillText('Perfil de Altitud (Verde) en espera de movimiento GPS...', 14, h / 2 + 4);
                     return;
                 }
-
                 const alts = pts.map(p => p.alt);
-                const minA = Math.min(...alts) - 2;
-                const maxA = Math.max(...alts) + 2;
+                const minA = Math.min(...alts) - 2; const maxA = Math.max(...alts) + 2;
                 const range = Math.max(10, maxA - minA);
-
                 ctx.beginPath();
                 pts.forEach((p, i) => {
                     const x = (i / (pts.length - 1)) * w;
                     const y = h - (((p.alt - minA) / range) * (h - 16)) - 6;
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 });
-                ctx.strokeStyle = '#22c55e';
-                ctx.lineWidth = 2.5;
-                ctx.stroke();
+                ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2.5; ctx.stroke();
             },
 
-            async downloadVisibleRegionOffline() {
-                document.getElementById('offline-map-status').textContent = '✅ Sectores de la vista actual guardados en la caché offline.';
-                this.speak('Zona guardada.');
-            },
-            async clearOfflineMapCache() {
-                await FitDB.clearTiles();
-                document.getElementById('offline-map-status').textContent = '🗑️ Caché de mapas limpiada.';
-            },
             exportCurrentRouteGPX() {
                 if (this.gps.trackPoints.length === 0) { alert('Aún no hay recorrido GPS grabado.'); return; }
                 const pts = this.gps.trackPoints.map(p => `<trkpt lat="${p.lat.toFixed(6)}" lon="${p.lon.toFixed(6)}"><ele>${p.alt}</ele></trkpt>`).join('\n');
@@ -1317,7 +1362,61 @@
                 a.click();
             },
 
-            // --- CONSTRUCTOR DE RUTINAS E HISTORIALES ---
+            // --- PERFIL, DONACIÓN, RUTINAS, AYUNO, BIOMETRÍA E HISTORIALES ---
+            loadUserProfile() {
+                const s = localStorage.getItem('jems_user_profile');
+                if (s) { try { this.profile = { ...this.profile, ...JSON.parse(s) }; } catch(_){} }
+                else { document.getElementById('modal-onboarding').classList.remove('hidden'); }
+                this.ble.maxHr = Math.max(150, 220 - (parseInt(this.profile.age, 10) || 49));
+                document.getElementById('header-user-info').textContent = `${this.profile.name} · ${this.profile.email || 'Configurar email'}`;
+            },
+            openProfileModal() {
+                document.getElementById('prof-name').value = this.profile.name;
+                document.getElementById('prof-email').value = this.profile.email;
+                document.getElementById('modal-onboarding').classList.remove('hidden');
+            },
+            saveUserProfile() {
+                this.profile.name = document.getElementById('prof-name').value.trim() || 'Usuario J.E.M.S.';
+                this.profile.email = document.getElementById('prof-email').value.trim();
+                this.profile.age = parseInt(document.getElementById('prof-age').value || '49', 10);
+                this.profile.height = parseInt(document.getElementById('prof-height').value || '187', 10);
+                this.profile.targetWeight = parseFloat(document.getElementById('prof-target-weight').value || '108');
+                localStorage.setItem('jems_user_profile', JSON.stringify(this.profile));
+                document.getElementById('modal-onboarding').classList.add('hidden');
+                this.loadUserProfile();
+                this.renderBiometrics();
+            },
+            toggleDonateModal(show) { document.getElementById('modal-donate').classList.toggle('hidden', !show); },
+            loadDonationConfig() {
+                const saved = localStorage.getItem('jems_donation_cfg');
+                if (saved) { try { this.donation = { ...this.donation, ...JSON.parse(saved) }; } catch(_){} }
+                document.getElementById('donate-link-paypal').href = this.donation.paypal || 'https://paypal.me/';
+                document.getElementById('donate-link-kofi').href = this.donation.kofi || 'https://ko-fi.com/';
+                document.getElementById('donate-bizum-display').textContent = this.donation.bizum || 'Gracias por apoyar el proyecto J.E.M.S.';
+            },
+            saveDonationConfig() {
+                this.donation = {
+                    paypal: document.getElementById('cfg-paypal').value.trim() || 'https://paypal.me/',
+                    kofi: document.getElementById('cfg-kofi').value.trim() || 'https://ko-fi.com/',
+                    bizum: document.getElementById('cfg-bizum').value.trim() || 'Gracias por tu apoyo'
+                };
+                localStorage.setItem('jems_donation_cfg', JSON.stringify(this.donation));
+                this.loadDonationConfig();
+            },
+            switchView(id) {
+                document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.target === id));
+                document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
+                if (id === 'view-dashboard' && this.gps.map) setTimeout(() => this.gps.map.invalidateSize(), 150);
+            },
+            speak(t) {
+                if (!this.tts.enabled || !('speechSynthesis' in window)) return;
+                window.speechSynthesis.cancel();
+                const u = new SpeechSynthesisUtterance(t); u.lang = 'es-ES'; window.speechSynthesis.speak(u);
+            },
+            toggleVoice() {
+                this.tts.enabled = !this.tts.enabled;
+                document.getElementById('btn-toggle-voice').textContent = this.tts.enabled ? '🔊 VOZ' : '🔇 OFF';
+            },
             toggleRoutineEditor(s) { document.getElementById('routine-editor').classList.toggle('hidden', !s); },
             updateSubcategories() {
                 const c = document.getElementById('add-ex-cat').value;
@@ -1330,9 +1429,6 @@
                     id: Date.now().toString(),
                     nombre: n,
                     sub: document.getElementById('add-ex-sub').value,
-                    series: document.getElementById('add-ex-sets').value || 1,
-                    reps: document.getElementById('add-ex-reps').value || null,
-                    peso: document.getElementById('add-ex-weight').value || null,
                     tiempo: parseInt(document.getElementById('add-ex-time').value || '60', 10)
                 });
                 document.getElementById('add-ex-name').value = '';
@@ -1359,6 +1455,8 @@
                     });
                 }
                 if (!queue.length) return;
+                this.timer.freeCountUp = false;
+                document.getElementById('cfg-free-countup').checked = false;
                 this.timer.customQueue = queue;
                 this.timer.queueIndex = 0;
                 this.timer.mode = r.nombre;
@@ -1369,14 +1467,13 @@
                 document.getElementById('active-station-detail').textContent = queue[0].detail;
                 this.switchView('view-dashboard');
                 this.updateTimerDisplay();
-                this.speak(`Rutina ${r.nombre} cargada en consola.`);
             },
             async renderRoutines() {
                 const list = await FitDB.getAll('rutinas');
                 document.getElementById('routines-list').innerHTML = list.map(r => `
                     <div class="card">
                         <div class="card-header"><span>${r.nombre}</span><span class="badge badge-blue">${r.rondas || 1} Rondas</span></div>
-                        <div class="sub-text">${(r.ejercicios || []).map((e,i) => `${i+1}. ${e.nombre || e} (${e.sub || ''})`).join('<br>')}</div>
+                        <div class="sub-text">${(r.ejercicios || []).map((e,i) => `${i+1}. ${e.nombre || e} (${e.sub || ''} - ${e.tiempo || 60}s)`).join('<br>')}</div>
                         <div class="btn-group mt-8">
                             <button class="btn btn-xs btn-primary" onclick="App.loadRoutineIntoTimer('${r.id}')">▶ CARGAR EN CONSOLA</button>
                             <button class="btn btn-xs btn-danger" onclick="FitDB.delete('rutinas','${r.id}').then(()=>App.renderRoutines())">🗑️</button>
@@ -1384,8 +1481,6 @@
                     </div>
                 `).join('');
             },
-
-            // --- AYUNO, BIOMETRÍA, OTRAS APPS E INFORMES ---
             changeFastingProtocol(h) { localStorage.setItem('jems_fasting_target_h', String(h)); this.startFastingWatcher(); },
             toggleFasting() {
                 if (localStorage.getItem('jems_fasting_start')) localStorage.removeItem('jems_fasting_start');
@@ -1417,7 +1512,6 @@
                 tick();
                 if (!this._fInt) this._fInt = setInterval(tick, 1000);
             },
-
             async saveBiometricsToday() {
                 const peso = parseFloat(document.getElementById('bio-weight').value || '126.5');
                 const sys = parseInt(document.getElementById('bio-sys').value || '122', 10);
@@ -1430,9 +1524,8 @@
                 localStorage.setItem('jems_last_weight', String(peso));
                 await FitDB.put('biometria', { fecha: new Date().toISOString().slice(0,16).replace('T',' '), peso, imc, sys, dia, glucose, spo2, hrRest });
                 await this.renderBiometrics();
-                this.speak('Constantes clínicas actualizadas.');
+                this.speak('Constantes actualizadas.');
             },
-
             async renderBiometrics() {
                 const all = (await FitDB.getAll('biometria')).reverse();
                 const b = all[0] || { peso: 126.5, imc: 36.2, sys: 122, dia: 78, glucose: 88, spo2: 98, hrRest: 58 };
@@ -1446,87 +1539,59 @@
                     <div class="metric-row"><span>${r.fecha} · <strong>${r.peso} kg</strong> (IMC ${r.imc})</span><span>PA ${r.sys}/${r.dia} · Gluc ${r.glucose} · O2 ${r.spo2}%</span></div>
                 `).join('');
             },
-
             async syncAllPhoneHealthApps() {
-                if (window.AndroidHealthBridge && typeof window.AndroidHealthBridge.fetchAllHealthData === 'function') {
-                    try {
-                        const data = JSON.parse(window.AndroidHealthBridge.fetchAllHealthData());
-                        await this.saveExternalSyncRecord('Puente Android (Zepp / Mi Fitness / Health Connect)', data.stepsToday || 0, data.activeKcalExternal || 0);
-                        return;
-                    } catch (_) {}
-                }
-                document.getElementById('external-imports-summary').innerHTML =
-                    `ℹ️ Sube un archivo exportado de <strong>Zepp / Strava / Mi Fitness (.GPX, .FIT, .TCX, .CSV)</strong> o anota los pasos abajo.`;
+                document.getElementById('external-imports-summary').innerHTML = `ℹ️ Sube tu archivo exportado (.GPX, .FIT, .TCX, .CSV) con el botón verde.`;
             },
-
-            async saveManualExternalAppSync() {
-                const steps = parseInt(document.getElementById('ext-steps-input').value || '0', 10);
-                const kcal = parseInt(document.getElementById('ext-kcal-input').value || '0', 10);
-                if (!steps && !kcal) return;
-                await this.saveExternalSyncRecord('Sincronización Zepp / Mi Fitness', steps, kcal);
-                document.getElementById('ext-steps-input').value = '';
-                document.getElementById('ext-kcal-input').value = '';
-            },
-
-            async saveExternalSyncRecord(sourceName, steps, kcal) {
-                localStorage.setItem('jems_steps_today', String(steps));
-                await FitDB.put('externos', { id: 'EXT_' + Date.now(), archivo: sourceName, fecha: new Date().toISOString(), pasos: steps, kcal: kcal });
-                document.getElementById('external-imports-summary').innerHTML = `✅ Recogido de <strong>${sourceName}</strong>: ${steps} pasos · ${kcal} kcal.`;
-                await this.renderExternalHistory();
-            },
-
             async importExternalActivity(e) {
                 const file = e.target.files[0]; if (!file) return;
-                await FitDB.put('externos', { id: 'EXT_' + Date.now(), archivo: file.name, fecha: new Date().toISOString(), pasos: 0, kcal: 0 });
-                document.getElementById('external-imports-summary').innerHTML = `✅ Archivo deportivo importado: <strong>${file.name}</strong>`;
+                await FitDB.put('externos', { id: 'EXT_' + Date.now(), archivo: file.name, fecha: new Date().toISOString() });
+                document.getElementById('external-imports-summary').innerHTML = `✅ Archivo importado: <strong>${file.name}</strong>`;
                 await this.renderExternalHistory();
             },
-
             async renderExternalHistory() {
                 const list = (await FitDB.getAll('externos')).reverse();
                 document.getElementById('external-history-list').innerHTML = list.slice(0, 5).map(x => `
-                    <div class="metric-row"><span>📅 ${x.fecha.slice(0, 10)} · <strong>${x.archivo}</strong></span><span>${x.pasos ? x.pasos + ' pasos' : ''}</span></div>
+                    <div class="metric-row"><span>📅 ${x.fecha.slice(0, 10)} · <strong>${x.archivo}</strong></span></div>
                 `).join('');
             },
-
             async renderSessionsHistory() {
                 const list = (await FitDB.getAll('sesiones')).reverse();
                 const el = document.getElementById('sessions-history-list');
                 if (!el) return;
-                el.innerHTML = list.slice(0, 6).map(s => `
+                el.innerHTML = list.slice(0, 8).map(s => `
                     <div class="metric-row">
-                        <span>📅 ${s.fecha.slice(0,10)} · <strong>${s.modo}</strong> (${s.distanciaKm || 0} km | ${s.kcal || 0} kcal | FC ${s.avgHr || '--'})</span>
-                        <button class="btn btn-xs btn-danger" onclick="FitDB.delete('sesiones','${s.id}').then(()=>App.renderSessionsHistory())">✕</button>
+                        <span>📅 ${s.fecha.slice(0,10)} · <strong>${s.modo}</strong> (${s.duracionTexto || '--'} | ${s.distanciaKm || 0} km | ${s.kcal || 0} kcal)</span>
+                        <div class="btn-group">
+                            <button class="btn btn-xs btn-primary" onclick='App.lastCompletedSession=${JSON.stringify(s)};App.openLastWorkoutSummary();'>📄 INFORME</button>
+                            <button class="btn btn-xs btn-danger" onclick="FitDB.delete('sesiones','${s.id}').then(()=>App.renderSessionsHistory())">✕</button>
+                        </div>
                     </div>
                 `).join('') || '<div class="sub-text">Sin sesiones registradas todavía.</div>';
             },
-
             async restoreBackupFile(e) {
                 const f = e.target.files[0]; if (!f) return;
                 await FitDB.restoreMasterBackup(await f.text());
                 location.reload();
             },
-
             async generateVectorPDF() {
                 if (!window.jspdf) return;
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 const sesiones = await FitDB.getAll('sesiones');
                 doc.setFontSize(14);
-                doc.text(`INFORME CLINICO Y DEPORTIVO J.E.M.S. PRO - ${this.profile.name}`, 14, 18);
+                doc.text(`INFORME GENERAL J.E.M.S. PRO - ${this.profile.name}`, 14, 18);
                 doc.setFontSize(10);
                 doc.text(`Email: ${this.profile.email || '--'} | Peso: ${localStorage.getItem('jems_last_weight') || '126.5'} kg | Sesiones: ${sesiones.length}`, 14, 27);
                 let y = 38;
-                sesiones.slice(-12).reverse().forEach(s => {
-                    doc.text(`- ${s.fecha.slice(0,10)} | ${s.modo} | Dist: ${s.distanciaKm || 0} km (+${s.desnivelPositivoM || 0}m) | ${s.kcal} kcal | FC Med: ${s.avgHr} bpm`, 14, y);
+                sesiones.slice(-15).reverse().forEach(s => {
+                    doc.text(`- ${s.fecha.slice(0,10)} | ${s.modo} (${s.duracionTexto || '--'}) | Dist: ${s.distanciaKm || 0} km | ${s.kcal} kcal | FC: ${s.avgHr} bpm`, 14, y);
                     y += 6;
                 });
-                doc.save(`INFORME_JEMS_v4_${new Date().toISOString().slice(0,10)}.pdf`);
+                doc.save(`INFORME_GENERAL_JEMS_${new Date().toISOString().slice(0,10)}.pdf`);
             },
-
             sendClinicalReportByEmail() {
                 if (!this.profile.email) { this.openProfileModal(); return; }
-                window.location.href = `mailto:${this.profile.email}?subject=Informe JEMS Pro v4.0&body=Resumen clinico y telemetria de ${this.profile.name}`;
+                window.location.href = `mailto:${this.profile.email}?subject=Informe General JEMS Pro&body=Resumen clinico y telemetria de ${this.profile.name}`;
             }
         };
         window.addEventListener('DOMContentLoaded', () => App.init());
