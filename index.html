@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>J.E.M.S. PRO v6.0 - Telemetría, Salud & Análisis Deportivo</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>J.E.M.S. PRO v6.2 - Telemetría, Salud & Análisis Deportivo</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin=""></script>
@@ -170,7 +174,9 @@
     <div id="pocket-lock-screen" class="pocket-lock-overlay hidden">
         <div style="font-size:0.82rem; font-weight:800; letter-spacing:1px;">🔒 MODO BOLSILLO ACTIVO (PANTALLA NEGRA OLED)</div>
         <div class="pocket-lock-stats" id="pocket-live-timer">00:00</div>
+        <div id="pocket-station-label" style="font-size:0.9rem; color:#fbbf24; font-weight:800; margin-bottom:4px;">LISTO PARA ENTRENAR</div>
         <div style="font-size:1.3rem; color:#f87171; font-weight:800;">♥ <span id="pocket-live-bpm">--</span> BPM · <span id="pocket-live-dist" style="color:#22c55e;">0.00 km</span></div>
+        <button class="btn btn-primary" onclick="App.skipToNextStation()" style="margin-top:18px; padding:12px 22px; border-radius:999px; font-weight:900; font-size:0.85rem; flex:initial;">⏭️ SIGUIENTE ESTACIÓN / FASE</button>
         <p style="font-size:0.75rem; color:#94a3b8; max-width:280px; margin-top:10px;">Mantén esta pantalla activa para que el navegador web no pierda acceso al satélite GPS.</p>
         <button class="pocket-unlock-btn" id="btn-pocket-unlock"
             onpointerdown="App.startPocketUnlockHold()"
@@ -238,6 +244,15 @@
                 <span>KM</span><span>RITMO</span><span>VELOCIDAD RELATIVA</span><span style="text-align:right;">FC / DESN</span>
             </div>
             <div id="pw-splits-list"></div>
+        </div>
+
+        <!-- 4B. Desglose de Estaciones / Bloques Híbridos -->
+        <div class="rep-card" id="pw-stations-card">
+            <strong style="font-size:0.9rem;">🏋️ Estaciones y Bloques Completados</strong>
+            <div class="split-row" style="color:#94a3b8; font-weight:800; border-bottom:2px solid #334155; margin-top:6px;">
+                <span>#</span><span>TIEMPO</span><span>ESTACIÓN / BLOQUE</span><span style="text-align:right;">FC / KM</span>
+            </div>
+            <div id="pw-stations-list"></div>
         </div>
 
         <!-- 5. Curva de Frecuencia Cardíaca y Barras de Zonas Z1-Z5 -->
@@ -333,7 +348,7 @@
         <div class="brand" onclick="App.openProfileModal()">
             <div class="avatar-circle" id="user-avatar">AT</div>
             <div>
-                <h1>J.E.M.S. <span class="accent">PRO v6.0</span></h1>
+                <h1>J.E.M.S. <span class="accent">PRO v6.2</span></h1>
                 <small id="header-user-info">Configurar perfil local</small>
             </div>
         </div>
@@ -368,6 +383,7 @@
                 <label class="field-label">⚡ 1. MODALIDAD DE ENTRENAMIENTO</label>
                 <select id="quick-mode-select" class="select-light-dropdown mt-6" onchange="App.onQuickModeSelected(this.value)">
                     <option value="CACO_3_1">🚶/🏃 CACO (Intervalos Caminar / Correr)</option>
+                    <option value="HYBRID_OPS">⚡ Sesión Híbrida (Carrera GPS + Estaciones Fuerza)</option>
                     <option value="HIKING_GPS">🥾 Senderismo / Montaña (GPS + Desnivel)</option>
                     <option value="RUN_FREE">🏃 Carrera Continua en Calle (GPS)</option>
                     <option value="WALK_ACTIVE">🚶 Caminata / Marcha Activa (GPS)</option>
@@ -426,18 +442,19 @@
                 <div class="btn-group mt-10">
                     <button class="btn btn-success" id="btn-main-start" onclick="App.startWorkoutTimer()">▶ INICIAR</button>
                     <button class="btn btn-warning" onclick="App.pauseWorkoutTimer()">⏸ PAUSA</button>
-                    <button class="btn btn-danger" onclick="App.finishAndSaveWorkout()">⏹ FINALIZAR E INFORME</button>
+                    <button class="btn btn-danger" onclick="App.finishAndSaveWorkout()">⏹ FIN E INFORME</button>
                 </div>
+                <button class="btn btn-primary btn-block mt-8" id="btn-next-station" onclick="App.skipToNextStation()" style="padding:13px; font-size:0.86rem; letter-spacing:0.3px;">
+                    ⏭️ SIGUIENTE ESTACIÓN / CAMBIO DE BLOQUE
+                </button>
                 <div class="btn-group mt-8">
-                    <button class="btn btn-sm btn-primary" onclick="App.openLastWorkoutSummary()">📊 VER ANÁLISIS / GRÁFICAS</button>
+                    <button class="btn btn-sm btn-secondary" onclick="App.openLastWorkoutSummary()">📊 VER ANÁLISIS</button>
                     <button class="btn btn-sm btn-dark" onclick="App.togglePocketLock(true)">🔒 MODO BOLSILLO</button>
                     <button class="btn btn-sm btn-secondary" id="btn-toggle-voice" onclick="App.toggleVoice()">🔊 VOZ</button>
                 </div>
             </div>
 
-            <div class="card mt-10">
-                <div class="card-header">
-             <!-- TARJETA GPS CORREGIDA A ANCHO COMPLETO (100%) -->
+            <!-- TARJETA GPS CORREGIDA A ANCHO COMPLETO (100%) -->
             <div class="card mt-10" style="display:block; width:100%;">
                 <div class="card-header">
                     <span>🛰️ NAVEGACIÓN GPS Y PERFIL DE DESNIVEL</span>
@@ -733,6 +750,20 @@
             },
             async seedDefaults() {
                 const ruts = await this.getAll('rutinas');
+                if (!ruts.some(r => r.id === 'ROT_HYBRID_TACTICAL')) {
+                    await this.put('rutinas', {
+                        id: 'ROT_HYBRID_TACTICAL',
+                        nombre: 'Sesión Híbrida Táctica (Carrera GPS + Fuerza)',
+                        categoria: 'HÍBRIDA',
+                        rondas: 4,
+                        ejercicios: [
+                            { nombre: 'Tramo Carrera / CACO (GPS Activo)', sub: '🏃 Correr (Calle / Pista)', tiempo: 240, rest: 15, isStatic: false },
+                            { nombre: 'Estación 1: Empuje / Flexiones / Press', sub: 'Autocarga', reps: 20, tiempo: 90, rest: 15, isStatic: true },
+                            { nombre: 'Tramo Carrera / CACO (GPS Activo)', sub: '🏃 Correr (Calle / Pista)', tiempo: 240, rest: 15, isStatic: false },
+                            { nombre: 'Estación 2: Tracción / Remo TRX / Kettlebell', sub: 'TRX / Suspensión', reps: 20, tiempo: 90, rest: 30, isStatic: true }
+                        ]
+                    });
+                }
                 if (ruts.length === 0) {
                     await this.put('rutinas', {
                         id: 'ROT_HYROX_OFFICIAL',
@@ -806,7 +837,7 @@
                 mode: 'CACO', freeCountUp: false, workSec: 180, restSec: 60, totalRounds: 8,
                 currentRound: 1, isWorkPhase: true, remainingSec: 180, elapsedTotalSec: 0,
                 running: false, finishing: false, intervalId: null, kcal: 0,
-                hrSamples: [], hrSeries: [], customQueue: [], queueIndex: 0, startedAt: 0
+                hrSamples: [], hrSeries: [], stationLogs: [], stationStartSec: 0, isStaticStation: false, customQueue: [], queueIndex: 0, startedAt: 0
             },
             lastCompletedSession: null,
             ble: { device: null, currentBpm: 0, lastHrTs: 0, maxHr: 180, wantConnected: false, connecting: false, reconnectAttempts: 0, reconnectTimer: null },
@@ -848,6 +879,9 @@
                 await this.renderSessionsHistory();
                 this.startFastingWatcher();
                 this.updateTimerDisplay();
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('./sw.js').catch(() => {});
+                }
                 setTimeout(() => this.initGpsModule(), 250);
                 await this.checkCrashRecovery();
 
@@ -1038,8 +1072,12 @@
                 const freshHr = this.hrFresh();
                 const pt = { lat: latitude, lon: longitude, alt: this.updateElevation(altitude), t: ts, acc: Math.round(accuracy), hr: freshHr, distKm: g.distanceKm, pace: null };
 
-                // Si el entrenamiento está en pausa, solo actualiza el marcador sin sumar metros
-                if (this.state === 'PAUSED') { this.updateGpsUI(); return; }
+                // Si está en pausa o en estación estática de fuerza (Sesión Híbrida), no sumar deriva GPS
+                if (this.state === 'PAUSED' || (this.timer.running && this.timer.isStaticStation)) {
+                    if (this.timer.isStaticStation && badge) badge.textContent = '🏋️ ESTACIÓN FUERZA (GPS EN PAUSA)';
+                    this.updateGpsUI();
+                    return;
+                }
 
                 const last = g.lastValidPoint;
                 if (!last) {
@@ -1253,6 +1291,7 @@
                 if (this.timer.running) return;
                 const presets = {
                     CACO_3_1: { name: 'CACO', wMin: 3, wSec: 0, rSec: 60, rounds: 8, free: false },
+                    HYBRID_OPS: { name: 'SESIÓN HÍBRIDA', wMin: 4, wSec: 0, rSec: 90, rounds: 4, free: false },
                     HIKING_GPS: { name: 'SENDERISMO', wMin: 0, wSec: 0, rSec: 0, rounds: 1, free: true },
                     RUN_FREE: { name: 'CARRERA GPS', wMin: 0, wSec: 0, rSec: 0, rounds: 1, free: true },
                     WALK_ACTIVE: { name: 'CAMINATA', wMin: 45, wSec: 0, rSec: 0, rounds: 1, free: true },
@@ -1270,6 +1309,7 @@
                 document.getElementById('active-mode-badge').textContent = p.name;
                 this.applyCustomTimerSettings();
                 if (v === 'HYROX_PRO') this.loadRoutineIntoTimer('ROT_HYROX_OFFICIAL');
+                if (v === 'HYBRID_OPS') this.loadRoutineIntoTimer('ROT_HYBRID_TACTICAL');
             },
 
             applyCustomTimerSettings() {
@@ -1293,6 +1333,9 @@
                 this.timer.kcal = 0;
                 this.timer.hrSamples = [];
                 this.timer.hrSeries = [];
+                this.timer.stationLogs = [];
+                this.timer.stationStartSec = 0;
+                this.timer.isStaticStation = false;
 
                 document.getElementById('timer-direction-label').textContent = free ? 'CRONÓMETRO LIBRE (HACIA ARRIBA)' : 'TIEMPO DE FASE / CUENTA ATRÁS';
                 document.getElementById('active-station-detail').textContent = free
@@ -1308,9 +1351,14 @@
                     this.timer.kcal = 0;
                     this.timer.hrSamples = [];
                     this.timer.hrSeries = [];
+                    this.timer.stationLogs = [];
+                    this.timer.stationStartSec = 0;
                     this.timer.elapsedTotalSec = 0;
                     this.timer.startedAt = Date.now();
-                    if (['SENDERISMO','CARRERA GPS','CAMINATA','CACO'].some(m => this.timer.mode.includes(m)) && !this.gps.enabled) {
+                    if (this.timer.customQueue.length > 0) {
+                        this.timer.isStaticStation = Boolean(this.timer.customQueue[0].isStatic);
+                    }
+                    if (['SENDERISMO','CARRERA','CAMINATA','CACO','HÍBRIDA','HYROX'].some(m => this.timer.mode.toUpperCase().includes(m)) && !this.gps.enabled) {
                         this.toggleGpsTracking(true);
                     }
                 }
@@ -1356,11 +1404,14 @@
                         while (this.timer.remainingSec <= 0 && this.timer.running) {
                             const overflow = Math.abs(this.timer.remainingSec);
                             if (this.timer.customQueue.length > 0) {
+                                this.recordCurrentStationLog();
                                 this.timer.queueIndex++;
                                 if (this.timer.queueIndex >= this.timer.customQueue.length) { this.finishAndSaveWorkout(); return; }
                                 const nextSt = this.timer.customQueue[this.timer.queueIndex];
                                 this.timer.currentRound = this.timer.queueIndex + 1;
                                 this.timer.isWorkPhase = !nextSt.isRest;
+                                this.timer.isStaticStation = Boolean(nextSt.isStatic);
+                                if (this.timer.isStaticStation) this.closeGpsSegment();
                                 this.timer.remainingSec = nextSt.duration - overflow;
                                 document.getElementById('active-station-detail').textContent = nextSt.detail;
                                 this.speak(nextSt.title);
@@ -1390,6 +1441,73 @@
                 this.closeGpsSegment();
                 document.getElementById('workout-setup-card').style.pointerEvents = 'auto';
                 document.getElementById('workout-setup-card').style.opacity = '1';
+                this.updateTimerDisplay();
+            },
+
+            recordCurrentStationLog() {
+                const nowElapsed = this.timer.elapsedTotalSec;
+                const spentSec = Math.max(1, nowElapsed - (this.timer.stationStartSec || 0));
+                this.timer.stationStartSec = nowElapsed;
+                let title = `${this.timer.mode} · Ronda ${this.timer.currentRound}`;
+                let isRest = !this.timer.isWorkPhase;
+                if (this.timer.customQueue.length > 0 && this.timer.customQueue[this.timer.queueIndex]) {
+                    const cur = this.timer.customQueue[this.timer.queueIndex];
+                    title = cur.title;
+                    isRest = Boolean(cur.isRest);
+                }
+                if (!isRest) {
+                    this.timer.stationLogs.push({
+                        step: this.timer.stationLogs.length + 1,
+                        title,
+                        sec: spentSec,
+                        hr: this.hrFresh(),
+                        distKm: Number(this.gps.distanceKm.toFixed(2))
+                    });
+                }
+            },
+
+            skipToNextStation() {
+                if (this.state === 'IDLE' || this.state === 'FINISHED') {
+                    this.startWorkoutTimer();
+                    return;
+                }
+                if (this.timer.customQueue.length > 0) {
+                    this.recordCurrentStationLog();
+                    this.timer.queueIndex++;
+                    if (this.timer.queueIndex >= this.timer.customQueue.length) {
+                        this.speak('Última estación completada.');
+                        this.finishAndSaveWorkout();
+                        return;
+                    }
+                    const nextSt = this.timer.customQueue[this.timer.queueIndex];
+                    this.timer.currentRound = this.timer.queueIndex + 1;
+                    this.timer.isWorkPhase = !nextSt.isRest;
+                    this.timer.isStaticStation = Boolean(nextSt.isStatic);
+                    if (this.timer.isStaticStation) this.closeGpsSegment();
+                    this.timer.remainingSec = nextSt.duration;
+                    document.getElementById('active-station-detail').textContent = nextSt.detail;
+                    this.speak(`Siguiente: ${nextSt.title}`);
+                    this.updateTimerDisplay();
+                    return;
+                }
+                this.recordCurrentStationLog();
+                if (this.timer.freeCountUp) {
+                    const bNum = this.timer.stationLogs.length;
+                    this.speak(`Bloque ${bNum} registrado`);
+                    document.getElementById('active-station-detail').textContent = `Bloque ${bNum + 1} en curso (${this.timer.mode})`;
+                } else {
+                    if (this.timer.isWorkPhase && this.timer.restSec > 0) {
+                        this.timer.isWorkPhase = false;
+                        this.timer.remainingSec = this.timer.restSec;
+                        this.speak(this.timer.mode.includes('CACO') ? 'Cambio a correr' : 'Descanso');
+                    } else {
+                        this.timer.currentRound++;
+                        if (this.timer.currentRound > this.timer.totalRounds) { this.finishAndSaveWorkout(); return; }
+                        this.timer.isWorkPhase = true;
+                        this.timer.remainingSec = this.timer.workSec;
+                        this.speak(`Ronda ${this.timer.currentRound}`);
+                    }
+                }
                 this.updateTimerDisplay();
             },
 
@@ -1446,6 +1564,7 @@
                     trimp, aeroScore, anaeroScore,
                     zonesSec,
                     laps,
+                    stations: raw.stations || [],
                     hrSeries: raw.hrSeries || [],
                     route: { segments: raw.segments || [], gaps: raw.gaps || [] }
                 };
@@ -1454,6 +1573,9 @@
             async finishAndSaveWorkout() {
                 if (this.timer.finishing) return;
                 this.timer.finishing = true;
+                if (this.timer.elapsedTotalSec > (this.timer.stationStartSec || 0) + 2) {
+                    this.recordCurrentStationLog();
+                }
                 this.pauseWorkoutTimer();
                 this.state = 'FINISHED';
 
@@ -1470,6 +1592,7 @@
                     segments: this.gps.segments,
                     gaps: this.gps.gaps,
                     laps: this.gps.laps,
+                    stations: this.timer.stationLogs,
                     hrSeries: this.timer.hrSeries
                 });
 
@@ -1493,16 +1616,30 @@
                 document.getElementById('timer-kcal').textContent = `${Math.round(this.timer.kcal)} kcal`;
 
                 const pill = document.getElementById('timer-phase-label');
+                const pocketSt = document.getElementById('pocket-station-label');
+                const curQ = (this.timer.customQueue.length > 0) ? this.timer.customQueue[this.timer.queueIndex] : null;
                 if (this.state === 'PAUSED') {
                     pill.textContent = '⏸ EN PAUSA'; pill.className = 'phase-pill paused';
+                    if (pocketSt) pocketSt.textContent = '⏸ EN PAUSA';
                 } else if (this.timer.running) {
-                    if (this.timer.isWorkPhase) {
-                        pill.textContent = `🔥 TRABAJO · RONDA ${this.timer.currentRound}`; pill.className = 'phase-pill work';
+                    if (curQ) {
+                        const tag = curQ.isRest ? `⚡ ${curQ.title}` : (curQ.isStatic ? `🏋️ ${curQ.title}` : `🏃 ${curQ.title}`);
+                        pill.textContent = tag;
+                        pill.className = curQ.isRest ? 'phase-pill rest' : 'phase-pill work';
+                        if (pocketSt) pocketSt.textContent = tag;
+                    } else if (this.timer.isWorkPhase) {
+                        const txt = this.timer.mode.includes('CACO') ? `🚶 CAMINAR · RONDA ${this.timer.currentRound}` : `🔥 TRABAJO · RONDA ${this.timer.currentRound}`;
+                        pill.textContent = txt; pill.className = 'phase-pill work';
+                        if (pocketSt) pocketSt.textContent = txt;
                     } else {
-                        pill.textContent = `⚡ RECUPERACIÓN / CAMBIO`; pill.className = 'phase-pill rest';
+                        const txt = this.timer.mode.includes('CACO') ? `🏃 CORRER · RONDA ${this.timer.currentRound}` : `⚡ RECUPERACIÓN / CAMBIO`;
+                        pill.textContent = txt; pill.className = 'phase-pill rest';
+                        if (pocketSt) pocketSt.textContent = txt;
                     }
                 } else {
-                    pill.textContent = 'LISTO PARA ENTRENAR'; pill.className = 'phase-pill work';
+                    pill.textContent = curQ ? `LISTO: ${curQ.title}` : 'LISTO PARA ENTRENAR';
+                    pill.className = 'phase-pill work';
+                    if (pocketSt) pocketSt.textContent = pill.textContent;
                 }
 
                 if (this.timer.hrSamples.length > 0) {
@@ -1583,6 +1720,26 @@
                     }).join('');
                 } else {
                     splitsEl.innerHTML = '<div style="padding:10px 0; color:#64748b; font-size:0.78rem;">Completa al menos 1 km con GPS activo para desglosar parciales por vuelta.</div>';
+                }
+
+                // Renderizar tabla de estaciones / bloques híbridos
+                const stListEl = document.getElementById('pw-stations-list');
+                const stCardEl = document.getElementById('pw-stations-card');
+                const stations = s.stations || [];
+                if (stListEl && stCardEl) {
+                    if (stations.length > 0) {
+                        stCardEl.classList.remove('hidden');
+                        stListEl.innerHTML = stations.map(st => `
+                            <div class="split-row">
+                                <strong>#${st.step}</strong>
+                                <span style="color:#38bdf8;font-weight:700;">${this.formatDuration(st.sec)}</span>
+                                <span style="color:#e2e8f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(st.title)}</span>
+                                <span style="text-align:right; color:#94a3b8;">${st.hr ? st.hr+'♥' : '--'} · ${(st.distKm||0).toFixed(2)}k</span>
+                            </div>
+                        `).join('');
+                    } else {
+                        stListEl.innerHTML = '<div style="padding:8px 0; color:#64748b; font-size:0.78rem;">Usa el botón ⏭️ Siguiente Estación o una rutina por estaciones para ver los parciales de cada bloque.</div>';
+                    }
                 }
 
                 // Renderizar barras de Zonas de FC (Z1-Z5)
@@ -2024,15 +2181,19 @@
             addExerciseToRoutine() {
                 const n = document.getElementById('add-ex-name').value.trim();
                 if (!n) return;
+                const cat = document.getElementById('add-ex-cat').value;
+                const subVal = document.getElementById('add-ex-sub').value;
+                const isGpsMove = (cat === 'CARDIO' && /correr|senderismo|caminata|caco|bicicleta/i.test(subVal + ' ' + n));
                 this.builder.exercises.push({
                     id: Date.now().toString(),
                     nombre: n,
-                    sub: document.getElementById('add-ex-sub').value,
+                    sub: subVal,
                     series: parseInt(document.getElementById('add-ex-sets').value, 10) || 1,
                     reps: parseInt(document.getElementById('add-ex-reps').value, 10) || null,
                     peso: parseFloat(document.getElementById('add-ex-weight').value) || null,
                     tiempo: parseInt(document.getElementById('add-ex-time').value || '60', 10),
-                    rest: parseInt(document.getElementById('add-ex-rest').value || '0', 10)
+                    rest: parseInt(document.getElementById('add-ex-rest').value || '0', 10),
+                    isStatic: !isGpsMove
                 });
                 document.getElementById('add-ex-name').value = '';
                 document.getElementById('routine-exercises-list').innerHTML = this.builder.exercises.map((e,i) =>
@@ -2057,7 +2218,8 @@
                 for (let i = 1; i <= rounds; i++) {
                     (r.ejercicios || []).forEach(ex => {
                         const extra = [ex.series > 1 ? `${ex.series}x` : '', ex.reps ? `${ex.reps} reps` : '', ex.peso ? `${ex.peso}kg` : ''].filter(Boolean).join(' ');
-                        queue.push({ title: `${ex.nombre}`, detail: `Ronda ${i}/${rounds} · ${ex.sub || ''} ${extra}`, duration: parseInt(ex.tiempo || 60, 10), isRest: false });
+                        const isSt = ex.isStatic !== undefined ? Boolean(ex.isStatic) : !(/carrera|correr|senderismo|caminata|caco|run/i.test((ex.nombre||'') + ' ' + (ex.sub||'')));
+                        queue.push({ title: `${ex.nombre}`, detail: `Ronda ${i}/${rounds} · ${ex.sub || ''} ${extra} ${isSt ? '(Fuerza)' : '(GPS)'}`, duration: parseInt(ex.tiempo || 60, 10), isRest: false, isStatic: isSt });
                         if (ex.rest && ex.rest > 0) {
                             queue.push({ title: 'Descanso / Transición', detail: `Recuperación (${ex.rest}s)`, duration: parseInt(ex.rest, 10), isRest: true });
                         }
@@ -2291,6 +2453,19 @@
                     s.laps.forEach(l => {
                         if (y > 275) { doc.addPage(); y = 20; }
                         doc.text(`Km ${l.km}: Ritmo ${this.formatPace(l.sec / 60)} | Desnivel +${l.elevGain || 0}m | FC Media: ${l.avgHr ?? '--'} BPM`, 16, y);
+                        y += 5.5;
+                    });
+                    y += 4;
+                }
+                if (s.stations && s.stations.length) {
+                    if (y > 260) { doc.addPage(); y = 20; }
+                    doc.setFontSize(11);
+                    doc.text('3. DESGLOSE DE ESTACIONES Y BLOQUES HIBRIDOS', 14, y);
+                    y += 6;
+                    doc.setFontSize(9);
+                    s.stations.forEach(st => {
+                        if (y > 275) { doc.addPage(); y = 20; }
+                        doc.text(`#${st.step} ${st.title}: Tiempo ${this.formatDuration(st.sec)} | FC: ${st.hr ?? '--'} BPM | Dist acum: ${(st.distKm||0).toFixed(2)} km`, 16, y);
                         y += 5.5;
                     });
                 }
