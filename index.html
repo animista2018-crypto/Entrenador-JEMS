@@ -437,55 +437,45 @@
 
             <div class="card mt-10">
                 <div class="card-header">
+             <!-- TARJETA GPS CORREGIDA A ANCHO COMPLETO (100%) -->
+            <div class="card mt-10" style="display:block; width:100%;">
+                <div class="card-header">
                     <span>🛰️ NAVEGACIÓN GPS Y PERFIL DE DESNIVEL</span>
                     <span class="badge" id="gps-status-badge">INACTIVO</span>
                 </div>
-                <div class="grid-2 mb-8">
-                    <select class="select-light-dropdown" onchange="App.setMapLayer(this.value)">
-                        <option value="TRAILS">🥾 Mapa Senderos y Caminos (CyclOSM)</option>
-                        <option value="NORMAL">🚗 Mapa Carreteras y Calles (OSM)</option>
-                        <option value="TERRAIN">⛰️ Mapa Topográfico Curvas (OpenTopo)</option>
-                        <option value="SATELLITE">🛰️ Vista Satélite Híbrida (Esri HD)</option>
-                    </select>
-                    <div class="btn-group">
-                        <button class="btn btn-xs btn-success" id="btn-toggle-gps" onclick="App.toggleGpsTracking()">▶ GPS</button>
-                        <button class="btn btn-xs btn-primary" id="btn-follow-gps" onclick="App.toggleAutoFollow()">🎯 SEGUIR</button>
-                        <button class="btn btn-xs btn-secondary" onclick="App.toggleMapFullscreen()">⛶</button>
-                        <button class="btn btn-xs btn-secondary" onclick="App.exportSessionGPX()">📥 GPX</button>
-   <span>🛰️ NAVEGACIÓN GPS Y PERFIL DE DESNIVEL</span>
-                    <span class="badge" id="gps-status-badge">INACTIVO</span>
-                </div>
-                <div class="grid-2 mb-8">
-                    <select class="select-light-dropdown" onchange="App.setMapLayer(this.value)">
-                        <option value="TRAILS">🥾 Mapa Senderos y Caminos (CyclOSM)</option>
-                        <option value="NORMAL">🚗 Mapa Carreteras y Calles (OSM)</option>
-                        <option value="TERRAIN">⛰️ Mapa Topográfico Curvas (OpenTopo)</option>
-                        <option value="SATELLITE">🛰️ Vista Satélite Híbrida (Esri HD)</option>
-                    </select>
-                    <div class="btn-group">
-                        <button class="btn btn-xs btn-success" id="btn-toggle-gps" onclick="App.toggleGpsTracking()">▶ GPS</button>
-                        <button class="btn btn-xs btn-primary" id="btn-follow-gps" onclick="App.toggleAutoFollow()">🎯 SEGUIR</button>
-                        <button class="btn btn-xs btn-secondary" onclick="App.toggleMapFullscreen()">⛶</button>
-                        <button class="btn btn-xs btn-secondary" onclick="App.exportSessionGPX()">📥 GPX</button>
-                    </div>
-                </div>
-                <div class="sub-text mb-8">
-                    ℹ️ En versión web, usa el <strong>🔒 Modo Bolsillo</strong> para evitar que el apagado físico de pantalla suspenda el GPS. Si hay cortes, se marcarán en gris discontinuo sin falsear kilómetros.
+
+                <!-- 1. Selector de tipo de mapa arriba a ancho completo -->
+                <select class="select-light-dropdown mb-8" style="width:100%;" onchange="App.setMapLayer(this.value)">
+                    <option value="TRAILS">🥾 Mapa Senderos y Caminos (CyclOSM)</option>
+                    <option value="NORMAL">🚗 Mapa Carreteras y Calles (OSM)</option>
+                    <option value="TERRAIN">⛰️ Mapa Topográfico Curvas (OpenTopo)</option>
+                    <option value="SATELLITE">🛰️ Vista Satélite Híbrida (Esri HD)</option>
+                </select>
+
+                <!-- 2. Fila ordenada de 4 botones encima del mapa -->
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; width:100%;" class="mb-8">
+                    <button class="btn btn-sm btn-success" id="btn-toggle-gps" onclick="App.toggleGpsTracking()">▶ GPS</button>
+                    <button class="btn btn-sm btn-primary" id="btn-follow-gps" onclick="App.toggleAutoFollow()">🎯 SEGUIR</button>
+                    <button class="btn btn-sm btn-secondary" onclick="App.toggleMapFullscreen()">⛶ AMPLIAR</button>
+                    <button class="btn btn-sm btn-secondary" onclick="App.exportSessionGPX()">📥 GPX</button>
                 </div>
 
-                <div id="tactical-map" class="gps-map-box"></div>
+                <!-- 3. Pantalla grande del Mapa GPS en el centro -->
+                <div id="tactical-map" class="gps-map-box" style="width:100%; height:300px; display:block;"></div>
 
-                <div class="gps-metrics-grid mt-8">
+                <!-- 4. Medidas y gráfica de desnivel debajo del mapa -->
+                <div class="gps-metrics-grid mt-8" style="width:100%;">
                     <div class="gps-metric-box"><small>DISTANCIA</small><strong id="gps-dist">0.00 km</strong></div>
-                    <div class="gps-metric-box"><small>RITMO MOV. / ACT.</small><strong id="gps-pace">--:-- /km</strong></div>
+                    <div class="gps-metric-box"><small>RITMO MOV.</small><strong id="gps-pace">--:-- /km</strong></div>
                     <div class="gps-metric-box"><small>ALTITUD</small><strong id="gps-alt">-- m</strong></div>
                     <div class="gps-metric-box"><small>DESNIVEL +</small><strong id="gps-gain" style="color:var(--green)">+0 m</strong></div>
                     <div class="gps-metric-box"><small>DESNIVEL -</small><strong id="gps-loss" style="color:var(--orange)">-0 m</strong></div>
                     <div class="gps-metric-box"><small>CARGA TRIMP</small><strong id="gps-effort">0 pts</strong></div>
                 </div>
-                <canvas id="elevation-chart" class="elevation-canvas mt-8"></canvas>
+
+                <canvas id="elevation-chart" class="elevation-canvas mt-8" style="width:100%;"></canvas>
             </div>
-        </section>
+                </section>
 
         <!-- VISTA 2: CONSTRUCTOR DE RUTINAS -->
         <section id="view-workouts" class="view">
